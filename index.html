@@ -1,0 +1,879 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>واژه‌نامه تخصصی هوش مصنوعی و برنامه‌نویسی - حامد سمیع زاده</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Vazirmatn -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+        }
+        .perspective {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- Header / Branding -->
+    <header class="bg-slate-800/80 backdrop-blur border-b border-slate-700 sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row justify-between items-center gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 p-2 rounded-xl text-white shadow-lg shadow-indigo-500/30">
+                    <i class="fa-solid fa-brain text-2xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-lg sm:text-xl font-black text-white">واژه‌نامه هوشمند هوش مصنوعی</h1>
+                    <p class="text-xs text-indigo-400">۳۰۰ اصطلاح تخصصی و کاربردی</p>
+                </div>
+            </div>
+            
+            <a href="https://instagram.com/hamedsamizadeh" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-pink-600 to-indigo-600 hover:from-pink-500 hover:to-indigo-500 text-white px-4 py-2 rounded-full text-sm font-bold shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
+                <i class="fa-brands fa-instagram text-lg"></i>
+                <span>hamedsamizadeh</span>
+            </a>
+        </div>
+    </header>
+
+    <!-- Main Navigation Tabs -->
+    <div class="max-w-6xl mx-auto w-full px-4 mt-6">
+        <div class="flex bg-slate-800 p-1.5 rounded-xl border border-slate-700/50">
+            <button onclick="switchTab('explorer')" id="tab-explorer" class="flex-1 py-2.5 px-3 rounded-lg text-sm font-bold transition-all duration-200 flex items-center justify-center gap-2 bg-indigo-600 text-white">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <span>جستجو و مرور</span>
+            </button>
+            <button onclick="switchTab('flashcards')" id="tab-flashcards" class="flex-1 py-2.5 px-3 rounded-lg text-sm font-bold transition-all duration-200 text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-clone"></i>
+                <span>فلش‌کارت تعاملی</span>
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="flex-1 py-2.5 px-3 rounded-lg text-sm font-bold transition-all duration-200 text-slate-400 hover:text-slate-200 flex items-center justify-center gap-2">
+                <i class="fa-solid fa-circle-question"></i>
+                <span>آزمون سنجش</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTENT SECTIONS -->
+    <main class="flex-grow max-w-6xl mx-auto w-full px-4 py-6">
+        
+        <!-- SECTION 1: EXPLORER (SEARCH & FILTER) -->
+        <section id="sec-explorer" class="space-y-6">
+            <!-- Search & Filter Controls -->
+            <div class="bg-slate-800 p-5 rounded-2xl border border-slate-700/60 space-y-4 shadow-xl">
+                <div class="relative">
+                    <span class="absolute inset-y-0 right-0 flex items-center pr-4 text-slate-400">
+                        <i class="fa-solid fa-search"></i>
+                    </span>
+                    <input type="text" id="search-input" oninput="filterWords()" placeholder="جستجوی واژه انگلیسی، تلفظ یا معنی به فارسی..." class="w-full bg-slate-900 border border-slate-700/80 rounded-xl py-3 pr-11 pl-4 text-slate-100 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold text-slate-400 mb-2">دسته‌بندی موضوعی کلمات:</label>
+                    <select id="category-filter" onchange="filterWords()" class="w-full bg-slate-900 border border-slate-700/80 rounded-xl py-2.5 px-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="all">📚 نمایش همه ۳۰۰ کلمه</option>
+                        <option value="1">1. مفاهیم پایه هوش مصنوعی و یادگیری ماشین</option>
+                        <option value="2">2. یادگیری عمیق و شبکه‌های عصبی</option>
+                        <option value="3">3. پردازش زبان طبیعی - NLP</option>
+                        <option value="4">4. بینایی ماشین و پردازش تصویر</option>
+                        <option value="5">5. علم داده و آمار</option>
+                        <option value="6">6. مفاهیم پایه برنامه‌نویسی و ساختار داده‌ها</option>
+                        <option value="7">7. مهندسی نرم‌افزار و معماری سیستم</option>
+                        <option value="8">8. توسعه وب، پایگاه داده و امنیت</option>
+                        <option value="9">9. رایانش ابری، دواپس و زیرساخت</option>
+                        <option value="10">10. الگوریتم‌ها و مفاهیم پیشرفته هوش مصنوعی</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Stats Counter -->
+            <div class="flex justify-between items-center px-2">
+                <span id="results-count" class="text-sm text-slate-400">در حال بارگذاری کلمات...</span>
+                <span class="text-xs text-indigo-400 font-bold">برای دیدن توضیحات هر کلمه روی کارت کلیک کنید</span>
+            </div>
+
+            <!-- Words Grid -->
+            <div id="words-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Word Cards will be dynamically injected here -->
+            </div>
+        </section>
+
+        <!-- SECTION 2: FLASHCARDS -->
+        <section id="sec-flashcards" class="hidden max-w-lg mx-auto py-4 space-y-6">
+            <div class="text-center">
+                <h2 class="text-xl font-bold text-white mb-1">کارت‌های یادگیری هوشمند</h2>
+                <p class="text-xs text-slate-400">روی کارت ضربه بزنید تا ترجمه آن نمایش داده شود</p>
+            </div>
+
+            <!-- Interactive Flashcard container -->
+            <div class="perspective h-80 w-full cursor-pointer" onclick="flipFlashcard()">
+                <div id="flashcard-inner" class="relative w-full h-full duration-500 preserve-3d shadow-2xl rounded-3xl">
+                    <!-- Front (English word) -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-indigo-900 to-indigo-950 border border-indigo-500/30 rounded-3xl flex flex-col justify-between p-8 backface-hidden">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-indigo-300 uppercase tracking-widest bg-indigo-500/10 px-3 py-1 rounded-full" id="fc-category">دسته بندی</span>
+                            <span class="text-xs text-slate-400" id="fc-index">1 / 300</span>
+                        </div>
+                        <div class="text-center py-6">
+                            <h3 id="fc-word" class="text-3xl font-black text-white tracking-wide mb-2">Word</h3>
+                            <p id="fc-pronounce" class="text-sm text-indigo-200 bg-indigo-500/20 px-4 py-1.5 rounded-full inline-block">تلفظ کلمه</p>
+                        </div>
+                        <div class="text-center text-xs text-slate-400">
+                            <i class="fa-solid fa-rotate mr-1"></i> برای دیدن معنی کلیک کنید
+                        </div>
+                    </div>
+                    <!-- Back (Persian details) -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-slate-800 to-slate-900 border border-slate-700/80 rounded-3xl flex flex-col justify-between p-8 backface-hidden rotate-y-180">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs font-bold text-indigo-400">معنی تخصصی</span>
+                            <i class="fa-solid fa-check-double text-indigo-500"></i>
+                        </div>
+                        <div class="text-center py-6">
+                            <p id="fc-meaning" class="text-xl font-bold text-white leading-relaxed">معنی و کاربرد تخصصی</p>
+                        </div>
+                        <div class="text-center text-xs text-slate-400">
+                            <i class="fa-solid fa-rotate mr-1"></i> بازگشت به کلمه انگلیسی
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigation Controls -->
+            <div class="flex justify-between items-center gap-4">
+                <button onclick="prevFlashcard()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
+                    <i class="fa-solid fa-chevron-right"></i>
+                    <span>قبلی</span>
+                </button>
+                <button onclick="randomFlashcard()" class="bg-indigo-600 hover:bg-indigo-500 p-3.5 rounded-xl font-bold text-white transition shadow-lg shadow-indigo-600/30" title="کارت تصادفی">
+                    <i class="fa-solid fa-shuffle text-lg"></i>
+                </button>
+                <button onclick="nextFlashcard()" class="flex-1 bg-slate-800 hover:bg-slate-700 py-3 rounded-xl font-bold flex items-center justify-center gap-2 border border-slate-700 transition">
+                    <span>بعدی</span>
+                    <i class="fa-solid fa-chevron-left"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- SECTION 3: QUIZ -->
+        <section id="sec-quiz" class="hidden max-w-xl mx-auto py-4 space-y-6">
+            <div id="quiz-start-screen" class="bg-slate-800 p-6 rounded-2xl border border-slate-700/80 text-center space-y-6 shadow-xl">
+                <div class="text-indigo-400 text-5xl">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-black text-white">آزمون خودسنجی اصطلاحات هوش مصنوعی</h2>
+                    <p class="text-sm text-slate-400 leading-relaxed">یک کوئیز ۵ سوالی تدارک دیده‌ایم تا سطح تسلط خود را محک بزنید. سوالات به صورت تصادفی از کلمات واژه‌نامه ساخته می‌شوند.</p>
+                </div>
+                <button onclick="startQuiz()" class="w-full bg-gradient-to-r from-indigo-600 to-pink-600 text-white font-bold py-3.5 rounded-xl hover:opacity-90 transition shadow-lg">
+                    شروع آزمون هوشمند
+                </button>
+            </div>
+
+            <!-- Active Quiz Screen -->
+            <div id="quiz-active-screen" class="hidden bg-slate-800 p-6 rounded-2xl border border-slate-700/80 space-y-6 shadow-xl">
+                <div class="flex justify-between items-center border-b border-slate-700/60 pb-3">
+                    <span id="quiz-progress" class="text-xs font-bold text-indigo-400">سوال ۱ از ۵</span>
+                    <span id="quiz-score" class="text-xs text-slate-400">امتیاز: ۰</span>
+                </div>
+
+                <div class="space-y-4">
+                    <h3 class="text-xs uppercase text-indigo-300 tracking-wider font-bold">معنی این کلمه چیست؟</h3>
+                    <h4 id="quiz-question-word" class="text-2xl font-black text-white tracking-wide">Machine Learning</h4>
+                </div>
+
+                <!-- Multiple choice options -->
+                <div class="grid grid-cols-1 gap-3" id="quiz-options">
+                    <!-- Dynamic buttons -->
+                </div>
+
+                <div id="quiz-feedback" class="hidden p-3.5 rounded-xl text-center font-bold text-sm">
+                    نتیجه پاسخ
+                </div>
+
+                <button id="quiz-next-btn" onclick="nextQuizQuestion()" class="hidden w-full bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition">
+                    رفتن به سوال بعدی
+                </button>
+            </div>
+
+            <!-- Quiz Result Screen -->
+            <div id="quiz-result-screen" class="hidden bg-slate-800 p-8 rounded-2xl border border-slate-700/80 text-center space-y-6 shadow-xl">
+                <div id="quiz-result-icon" class="text-5xl">🎉</div>
+                <div class="space-y-2">
+                    <h2 class="text-2xl font-black text-white">پایان آزمون!</h2>
+                    <p id="quiz-result-text" class="text-lg font-bold text-indigo-300"></p>
+                </div>
+                <div class="flex gap-4">
+                    <button onclick="startQuiz()" class="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl transition">
+                        تلاش مجدد
+                    </button>
+                    <a href="https://instagram.com/hamedsamizadeh" target="_blank" class="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl transition flex items-center justify-center gap-2">
+                        <i class="fa-brands fa-instagram text-lg"></i>
+                        <span>عضویت در اینستاگرام</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800/80 py-6 text-center text-slate-500 text-sm mt-auto">
+        <div class="max-w-6xl mx-auto px-4 space-y-2">
+            <p>تمامی حقوق علمی برای تهیه‌کننده محفوظ است.</p>
+            <p class="font-bold text-slate-400">تهیه و تنظیم: حامد سمیع زاده | <a href="https://instagram.com/hamedsamizadeh" target="_blank" class="text-indigo-400 hover:underline">hamedsamizadeh@</a></p>
+        </div>
+    </footer>
+
+    <!-- GLOSSARY DATA & SCRIPTS -->
+    <script>
+        // Full Dataset (300 Words mapped from markdown)
+        const glossaryData = [
+            // Page 1
+            { id: 1, cat: 1, en: "Artificial Intelligence", pr: "آرتیفیشال اینتلیجنس", fa: "هوش مصنوعی", desc: "شبیه‌سازی فرآیندهای هوش انسانی توسط ماشین‌ها و رایانه‌ها." },
+            { id: 2, cat: 1, en: "Machine Learning", pr: "ماشین لرنینگ", fa: "یادگیری ماشین", desc: "شاخه‌ای از هوش مصنوعی که به سیستم‌ها توانایی یادگیری خودکار از داده‌ها بدون برنامه‌نویسی صریح می‌دهد." },
+            { id: 3, cat: 1, en: "Algorithm", pr: "الگوریتم", fa: "الگوریتم", desc: "مجموعه دستورالعمل‌های گام‌به‌گام برای حل یک مسئله یا انجام کار محاسباتی مشخص." },
+            { id: 4, cat: 1, en: "Model", pr: "مدل", fa: "مدل", desc: "بازنمایی ریاضی از یک فرآیند واقعی که با دریافت داده آموزش دیده است تا پیش‌بینی انجام دهد." },
+            { id: 5, cat: 1, en: "Dataset", pr: "دیتاست", fa: "مجموعه داده‌ها", desc: "مجموعه داده‌های خام یا پردازش شده که برای آموزش و تست مدل استفاده می‌شوند." },
+            { id: 6, cat: 1, en: "Training", pr: "ترینینگ", fa: "آموزش دادن", desc: "فرآیند تحلیل داده‌ها توسط مدل برای یادگیری الگوها و برقراری ارتباطات بهینه ریاضی." },
+            { id: 7, cat: 1, en: "Testing", pr: "تستینگ", fa: "آزمایش مدل", desc: "ارزیابی عملکرد مدل یادگیری ماشین با استفاده از داده‌های جدید و دیده‌نشده." },
+            { id: 8, cat: 1, en: "Overfitting", pr: "اورفیتینگ", fa: "بیش‌برازش / اورفیت", desc: "حفظ کردن داده‌های آموزش توسط مدل به نحوی که روی داده‌های جدید عملکرد ضعیفی از خود نشان می‌دهد." },
+            { id: 9, cat: 1, en: "Underfitting", pr: "آندرفیتینگ", fa: "کم‌برازش / آندرفیت", desc: "ناتوانی مدل در یادگیری الگوهای پایه داده‌ها به علت سادگی بیش از حد مدل یا کم بودن زمان آموزش." },
+            { id: 10, cat: 1, en: "Bias", pr: "بایاس", fa: "سوگیری / انحراف", desc: "خطای ناشی از پیش‌فرض‌های نادرست در الگوریتم که باعث می‌شود مدل الگوهای درست را نادیده بگیرد." },
+            { id: 11, cat: 1, en: "Variance", pr: "واریانس", fa: "پراکندگی / واریانس", desc: "حساسیت شدید مدل به نوسانات و جزئیات تصادفی در داده‌های آموزش." },
+            { id: 12, cat: 1, en: "Supervised Learning", pr: "سوپروایزد لرنینگ", fa: "یادگیری نظارت‌شده", desc: "یادگیری الگوهای ورودی به همراه برچسب‌های مشخص و پاسخ‌های درست صریح." },
+            { id: 13, cat: 1, en: "Unsupervised Learning", pr: "آن‌سوپروایزد لرنینگ", fa: "یادگیری نظارت‌نشده", desc: "کشف الگوها و ساختارهای پنهان در داده‌ها بدون داشتن برچسب یا پاسخ مشخص." },
+            { id: 14, cat: 1, en: "Reinforcement Learning", pr: "ری‌اینفورسمنت لرنینگ", fa: "یادگیری تقویتی", desc: "یادگیری یک عامل هوشمند برای تعامل با محیط بر اساس پاداش و جریمه دریافتی." },
+            { id: 15, cat: 1, en: "Feature", pr: "فیچر", fa: "ویژگی", desc: "متغیرهای مستقل ورودی که به عنوان مشخصه‌های اصلی داده‌ها به مدل داده می‌شوند." },
+            { id: 16, cat: 1, en: "Label", pr: "لیبل", fa: "برچسب", desc: "خروجی، پاسخ یا کلاس هدف مورد نظر در مدل‌های یادگیری نظارت‌شده." },
+            { id: 17, cat: 1, en: "Accuracy", pr: "اکیورسی", fa: "دقت کلی", desc: "نسبت پیش‌بینی‌های درست انجام‌شده توسط مدل به کل پیش‌بینی‌ها." },
+            { id: 18, cat: 1, en: "Precision", pr: "پریسیژن", fa: "صحت / دقت مثبت", desc: "نسبت پیش‌بینی‌های درست مثبت به کل مواردی که مدل ادعا کرده مثبت است." },
+            { id: 19, cat: 1, en: "Recall", pr: "ریکال", fa: "بازیابی / حساسیت", desc: "نسبت موارد مثبتِ واقعی که مدل توانسته به درستی شناسایی و بازیابی کند." },
+            { id: 20, cat: 1, en: "F1-Score", pr: "اف‌وان اسکور", fa: "معیار اف۱", desc: "میانگین هارمونیک یا تعادلی بین معیار صحت و بازیابی برای ارزیابی جامع‌تر مدل." },
+            { id: 21, cat: 1, en: "Regression", pr: "رگرسیون", fa: "رگرسیون", desc: "پیش‌بینی مقادیر عددی پیوسته مانند قیمت خانه، دما یا ارزش سهام." },
+            { id: 22, cat: 1, en: "Classification", pr: "کلاسیفیکیشن", fa: "طبقه‌بندی", desc: "دسته‌بندی داده‌ها به کلاس‌های گسسته و مشخص (مانند ایمیل اسپم یا غیر اسپم)." },
+            { id: 23, cat: 1, en: "Clustering", pr: "کلاسترینگ", fa: "خوشه‌بندی", desc: "گروه‌بندی خودکار داده‌های مشابه در یادگیری نظارت‌نشده بدون کلاس‌های از قبل تعیین شده." },
+            { id: 24, cat: 1, en: "Hyperparameter", pr: "هایپرپارامتر", fa: "ابرپارامتر", desc: "تنظیماتی بیرونی که قبل از شروع فرآیند آموزش مدل به صورت دستی یا الگوریتمی تعیین می‌شوند." },
+            { id: 25, cat: 1, en: "Epoch", pr: "ایپاک", fa: "دور کامل (ایپاک)", desc: "یک دور عبور کامل و رفت‌وبرگشت تمام داده‌های آموزشی موجود در مجموعه داده از میان مدل." },
+            { id: 26, cat: 1, en: "Batch", pr: "بچ", fa: "دسته / پارت", desc: "بخش یا تکه کوچکی از داده‌ها که به صورت همزمان جهت آموزش به مدل ارسال می‌شود." },
+            { id: 27, cat: 1, en: "Loss Function", pr: "لاس فانکشن", fa: "تابع زیان / هزینه", desc: "معیار ریاضی برای سنجش میزان تفاوت و خطای خروجی مدل با مقادیر واقعی." },
+            { id: 28, cat: 1, en: "Gradient Descent", pr: "گرادیان دیسنت", fa: "گرادیان کاهشی", desc: "الگوریتم بهینه‌سازی پایه برای کمینه کردن خطاهای مدل با حرکت در جهت شیب خطای نزولی." },
+            { id: 29, cat: 1, en: "Inference", pr: "اینفرنس", fa: "استنتاج", desc: "استفاده از یک مدل کاملاً آموزش‌دیده برای پیش‌بینی روی داده‌های واقعی دنیای واقعی." },
+            { id: 30, cat: 1, en: "Validation", pr: "ولیدیشن", fa: "اعتبارسنجی", desc: "استفاده از داده‌های واسط برای تنظیم ابرپارامترها و اطمینان از عدم اورفیتینگ مدل." },
+
+            // Page 2
+            { id: 31, cat: 2, en: "Deep Learning", pr: "دیپ لرنینگ", fa: "یادگیری عمیق", desc: "زیرشاخه‌ای از یادگیری ماشین بر پایه شبکه‌های عصبی عمیق با تعداد لایه‌های پنهان زیاد." },
+            { id: 32, cat: 2, en: "Neural Network", pr: "نورال نتورک", fa: "شبکه عصبی", desc: "مدل‌های محاسباتی قدرتمند الهام گرفته از ساختار شبکه عصبی مغز زیستی انسان." },
+            { id: 33, cat: 2, en: "Artificial Neural Network", pr: "آرتیفیشال نورال نتورک", fa: "شبکه عصبی مصنوعی", desc: "ساختار پایه شبکه‌های عصبی متشکل از نورون‌های ورودی، پنهان و خروجی متصل‌به‌هم (ANN)." },
+            { id: 34, cat: 2, en: "Convolutional Neural Network", pr: "کانولوشنال نورال نتورک", fa: "شبکه عصبی کانولوشنی", desc: "شبکه‌ای تخصصی برای پردازش و استخراج ویژگی‌های تصاویر و داده‌های چندبعدی (CNN)." },
+            { id: 35, cat: 2, en: "Recurrent Neural Network", pr: "ریکارنت نورال نتورک", fa: "شبکه عصبی برگشتی", desc: "شبکه عصبی مناسب برای داده‌های متوالی مانند متن و سری‌های زمانی (RNN)." },
+            { id: 36, cat: 2, en: "LSTM", pr: "ال‌اس‌تی‌ام", fa: "حافظه طولانی کوتاه مدت", desc: "نوع پیشرفته‌ای از RNN که مشکلات مربوط به فراموشی اطلاعات در فواصل زمانی طولانی را حل می‌کند." },
+            { id: 37, cat: 2, en: "Transformer", pr: "ترنسفورمر", fa: "ترنسفورمر", desc: "معماری انقلابی هوش مصنوعی بر پایه مکانیزم توجه، که اساس مدل‌های زبانی مانند GPT است." },
+            { id: 38, cat: 2, en: "Generative Adversarial Network", pr: "جنریتیو ادورسیال نتورک", fa: "شبکه مولد رقابتی", desc: "شبکه‌ای شامل دو بخش مولد و متمایزگر برای تولید داده‌های مصنوعی فوق‌العاده واقع‌گرایانه (GAN)." },
+            { id: 39, cat: 2, en: "Autoencoder", pr: "اتوانکودر", fa: "خودکدگذار", desc: "شبکه‌ای با ساختار قیف‌مانند جهت فشرده‌سازی و سپس بازسازی داده‌ها با کمترین اتلاف اطلاعات." },
+            { id: 40, cat: 2, en: "Activation Function", pr: "اکتیویشن فانکشن", fa: "تابع فعال‌سازی", desc: "تابع ریاضی که خروجی غیرخطی به نورون می‌دهد و فعال یا غیرفعال بودن آن را مشخص می‌کند." },
+            { id: 41, cat: 2, en: "ReLU", pr: "ری‌لو", fa: "تابع یکسوساز خطی", desc: "محبوب‌ترین تابع فعال‌سازی غیرخطی در شبکه‌های عمیق که مقادیر منفی را صفر می‌کند." },
+            { id: 42, cat: 2, en: "Sigmoid", pr: "سیگموئید", fa: "تابع سیگموئید", desc: "تابعی که مقادیر ورودی را به بازه صفر و یک می‌برد؛ مناسب برای تخمین احتمالات ریاضی." },
+            { id: 43, cat: 2, en: "Softmax", pr: "سافت‌مکس", fa: "تابع سافت‌مکس", desc: "تابعی برای تبدیل بردارهای عددی به توزیع احتمال بین چند کلاس گوناگون خروجی." },
+            { id: 44, cat: 2, en: "Backpropagation", pr: "بک‌پراپگیشن", fa: "پس‌انتشار خطا", desc: "الگوریتم به‌روزرسانی وزن‌های شبکه بر اساس محاسبه خطا در جهت معکوس از خروجی به ورودی." },
+            { id: 45, cat: 2, en: "Weight", pr: "ویت", fa: "وزن (ضریب)", desc: "پارامترهای قابل آموزشی که میزان اهمیت سیگنال عبوری بین دو نورون متصل را تنظیم می‌کنند." },
+            { id: 46, cat: 2, en: "Bias (in neuron)", pr: "بایاس نورون", fa: "اریب نورون / بایاس", desc: "عدد ثابتی که به مجموع ورودی‌های وزن‌دار نورون اضافه می‌شود تا آستانه فعال‌سازی را جابجا کند." },
+            { id: 47, cat: 2, en: "Hidden Layer", pr: "هیدن لیر", fa: "لایه پنهان", desc: "لایه‌های میانی در معماری شبکه عصبی که بین لایه ورودی و خروجی وظیفه استخراج ویژگی‌ها را دارند." },
+            { id: 48, cat: 2, en: "Neuron", pr: "نورون", fa: "نورون / گره محاسباتی", desc: "کوچک‌ترین واحد محاسباتی در یک شبکه عصبی مصنوعی که ضرب، جمع و اعمال غیرخطی انجام می‌دهد." },
+            { id: 49, cat: 2, en: "Synapse", pr: "سیناپس", fa: "اتصال / سیناپس", desc: "پیوند یا اتصال محاسباتی میان دو نورون که وزن مدل روی آن اعمال می‌گردد." },
+            { id: 50, cat: 2, en: "Pooling", pr: "پولینگ", fa: "کاهش ابعاد نقشه ویژگی", desc: "عملیاتی در شبکه‌های CNN برای کوچک‌تر کردن ابعاد تصاویر و کاهش بار محاسباتی لایه‌ها." },
+            { id: 51, cat: 2, en: "Dropout", pr: "دراپ‌اوت", fa: "حذف تصادفی نورون‌ها", desc: "تکنیکی برای جلوگیری از اورفیت با خاموش کردن تصادفی درصدی از نورون‌ها در طول آموزش." },
+            { id: 52, cat: 2, en: "Fine-tuning", pr: "فاین تیونینگ", fa: "تنظیم دقیق", desc: "آموزش مجدد و ظریف یک مدل بزرگِ از پیش‌آموزش‌دیده بر روی داده‌های محدود و تخصصی جدید." },
+            { id: 53, cat: 2, en: "Transfer Learning", pr: "ترنسفر لرنینگ", fa: "یادگیری انتقالی", desc: "استفاده از دانشِ کسب‌شده توسط یک مدل در یک کار مبدا برای حل یک مسئله متفاوت مقصد." },
+            { id: 54, cat: 2, en: "Embedding", pr: "امبدینگ", fa: "جاسازی / بردارسازی", desc: "تبدیل کلمات یا اشیاء به بردارهای عددی در یک فضای با ابعاد بالاتر با حفظ شباهت‌های معنایی." },
+            { id: 55, cat: 2, en: "Latent Space", pr: "لیتنت اسپیس", fa: "فضای پنهان", desc: "فضایی چندبعدی و فشرده که ویژگی‌های اصلی و مخفی داده‌های ورودی را نمایش می‌دهد." },
+            { id: 56, cat: 2, en: "Attention Mechanism", pr: "اتنشن مکانیزم", fa: "مکانیزم توجه", desc: "قابلیتی در مدل‌های هوش مصنوعی برای تمرکز بر روی بخش‌های بااهمیت‌تر ورودی در هر زمان." },
+            { id: 57, cat: 2, en: "Self-Attention", pr: "سلف اتنشن", fa: "خود‌توجهی", desc: "سنجش ارتباط متقابل کلمات داخل یک جمله با سایر کلمات همان جمله برای فهم کامل‌تر بافت متن." },
+            { id: 58, cat: 2, en: "Feedforward", pr: "فیدفوروارْد", fa: "پیش‌رو / فیدفوروارْد", desc: "جریان مستقیم اطلاعات از ورودی به خروجی بدون وجود دور یا حلقه بازگشتی در شبکه." },
+            { id: 59, cat: 2, en: "Parameter", pr: "پارامتر", fa: "پارامترهای مدل", desc: "متغیرهای درونی مدل (مانند وزن‌ها و بایاس‌ها) که مستقیماً در طول فرآیند آموزش آپدیت می‌شوند." },
+            { id: 60, cat: 2, en: "Weights Initialization", pr: "ویتس اینیشیالایزیشن", fa: "مقداردهی اولیه وزن‌ها", desc: "شروع آموزش با توزیع مقادیر بهینه برای جلوگیری از مشکلاتی چون انفجار یا نابودی گرادیان." },
+
+            // Page 3
+            { id: 61, cat: 3, en: "Natural Language Processing", pr: "نچرال لنگویج پراسسینگ", fa: "پردازش زبان طبیعی (NLP)", desc: "توانایی رایانه‌ها در درک، تحلیل و تولید زبان‌های طبیعی انسانی." },
+            { id: 62, cat: 3, en: "Sentiment Analysis", pr: "سنتی‌منت آنالیز", fa: "تحلیل حس و نظر", desc: "تشخیص و دسته‌بندی بار احساسی مثبت، منفی یا خنثی متون نوشته شده توسط کاربران." },
+            { id: 63, cat: 3, en: "Named Entity Recognition", pr: "نیمد انتیتی ریکاگنیشن", fa: "تشخیص موجودیت‌های نام‌دار", desc: "استخراج و دسته‌بندی کلمات خاص مانند نام اشخاص، مکان‌ها، سازمان‌ها و تاریخ‌ها از متن (NER)." },
+            { id: 64, cat: 3, en: "Tokenization", pr: "توکنایزیشن", fa: "توکن‌سازی / نشانه‌گذاری", desc: "شکستن متون و جملات طولانی به بخش‌های کوچک‌تر و معنادار به نام توکن." },
+            { id: 65, cat: 3, en: "Token", pr: "توکن", fa: "توکن (نشانه)", desc: "کوچک‌ترین واحد متنی (مانند کلمه، کاراکتر یا ریشه‌های واژه‌ای) که به مدل زبانی ارسال می‌شود." },
+            { id: 66, cat: 3, en: "Part-of-Speech Tagging", pr: "پارت آو اسپچ تگینگ", fa: "برچسب‌گذاری اجزای سخن", desc: "تشخیص گرامری و مشخص کردن نقش کلمات در جمله مانند اسم، فعل، حرف اضافه یا صفت." },
+            { id: 67, cat: 3, en: "Lemmatization", pr: "لماتایزیشن", fa: "ریشه‌یابی لغوی", desc: "تبدیل کلمات صرف شده یا جمع به ریشه اصلی و رسمی آن‌ها با استفاده از لغت‌نامه معتبر." },
+            { id: 68, cat: 3, en: "Stemming", pr: "استمینگ", fa: "بن‌یابی", desc: "حذف پیشوندها و پسوندهای لغات به صورت الگوریتمی برای رسیدن به ریشه تقریبی کلمه." },
+            { id: 69, cat: 3, en: "Stop Words", pr: "استاپ وردز", fa: "کلمات توقف", desc: "کلمات پر تکراری مانند «از»، «به»، «و» که بار معنایی خاصی در الگوریتم‌های سنتی پردازش متن ندارند." },
+            { id: 70, cat: 3, en: "Bag of Words", pr: "بگ آو وردز", fa: "کیسه کلمات", desc: "مدل ساده نمایش متون بر اساس فراوانی تکرار کلمات بدون توجه به ساختار و ترتیب قرارگیری لغات." },
+            { id: 71, cat: 3, en: "TF-IDF", pr: "تی‌اف آی‌دی‌اف", fa: "سنجش اهمیت کلمه", desc: "فرمول آماری برای سنجش اهمیت یک کلمه در یک سند خاص نسبت به کل اسناد موجود." },
+            { id: 72, cat: 3, en: "Word2Vec", pr: "ورد تو وک", fa: "ورد تو وک", desc: "یک روش محبوب برای تبدیل کلمات به بردارهای عددی با در نظر گرفتن شباهت‌های معنایی عمیق." },
+            { id: 73, cat: 3, en: "Language Model", pr: "لنگویج مدل", fa: "مدل زبانی", desc: "مدلی هوشمند که توزیع احتمالی کلمات بعدی را بر اساس کلمات قبلی تخمین می‌زند." },
+            { id: 74, cat: 3, en: "Syntax", pr: "سینتکس", fa: "نحو / ساختار", desc: "قواعد، ترتیب چیدمان و گرامر جملات برای ایجاد معنای ظاهری درست در زبان طبیعی." },
+            { id: 75, cat: 3, en: "Semantics", pr: "سیمنتیکس", fa: "معناشناسی", desc: "مطالعه و درک عمیق مفهوم، نیت واقعی و معنای نهفته در عبارات و جملات." },
+            { id: 76, cat: 3, en: "Parsing", pr: "پارسینگ", fa: "تجزیه نحوی", desc: "تحلیل و رسم درخت ساختاری کلمات یک جمله بر اساس قوانین گرامری حاکم بر زبان." },
+            { id: 77, cat: 3, en: "Text Generation", pr: "تکست جنریشن", fa: "تولید متن", desc: "تولید خودکار جملات منطقی، روان و شبیه به انسان توسط مدل‌های هوش مصنوعی زبانی." },
+            { id: 78, cat: 3, en: "Text Summarization", pr: "تکست سامارایزیشن", fa: "خلاصه‌سازی متن", desc: "کاهش حجم متون طولانی به چند خط کوتاه کلیدی با حفظ اطلاعات مهم سند." },
+            { id: 79, cat: 3, en: "Question Answering", pr: "کوئسچن انسرینگ", fa: "سیستم پاسخ به سوالات", desc: "سیستمی که سوالات طبیعی را دریافت کرده و از میان منابع متنی موجود، پاسخ دقیق استخراج می‌کند." },
+            { id: 80, cat: 3, en: "Speech-to-Text", pr: "اسپیچ تو تکست", fa: "تبدیل گفتار به متن", desc: "فناوری پردازش سیگنال‌های صوتی و تبدیل صدای گوینده به فایل متنی مکتوب." },
+            { id: 81, cat: 3, en: "Text-to-Speech", pr: "تکست تو اسپیچ", fa: "تبدیل متن به گفتار", desc: "سیستم تولید صدای مصنوعی اما بسیار طبیعی انسان از روی یک متن نوشته شده." },
+            { id: 82, cat: 3, en: "Corpus", pr: "کورپوس", fa: "پیکره متنی", desc: "مجموعه عظیمی از متون سازمان‌یافته که به عنوان منبع اصلی آموزش و مطالعه مدل‌های زبانی استفاده می‌شود." },
+            { id: 83, cat: 3, en: "Vocabulary", pr: "وکبیولری", fa: "واژگان مدل", desc: "مجموعه تمام توکن‌ها و کلمات منحصربه‌فردی که یک مدل زبانی قادر به شناسایی و تولید آن‌ها است." },
+            { id: 84, cat: 3, en: "N-gram", pr: "ان گرم", fa: "ان‌گرم", desc: "توالی پشت‌سرهمی از N کلمه یا نویسه متنی برای تحلیل‌های آماری زبان." },
+            { id: 85, cat: 3, en: "Perplexity", pr: "پرپلکسیتی", fa: "سرگشتگی", desc: "معیاری آماری برای سنجش سختی پیش‌بینی کلمه بعدی توسط مدل زبانی؛ مقدار کمتر نشان‌دهنده کیفیت بهتر است." },
+            { id: 86, cat: 3, en: "Sequence-to-Sequence", pr: "سیکوئنس تو سیکوئنس", fa: "مدل‌های ترتیبی", desc: "نوعی معماری شبکه برای نگاشت یک توالی متنی ورودی به یک توالی خروجی (مانند ترجمه ماشینی)." },
+            { id: 87, cat: 3, en: "Large Language Model", pr: "لارج لنگویج مدل", fa: "مدل زبانی بزرگ (LLM)", desc: "مدل‌های زبانی غول‌پیکر با میلیاردها پارامتر که وظایف پیچیده ادراک متنی را انجام می‌دهند." },
+            { id: 88, cat: 3, en: "Context Window", pr: "کانتکست ویندو", fa: "پنجره بافت / زمینه", desc: "حداکثر تعداد کلمات یا توکن‌هایی که یک مدل در هر بار پردازش و تولید قادر به یادآوری و بررسی است." },
+            { id: 89, cat: 3, en: "Prompt", pr: "پرامپت", fa: "دستورالعمل / پرامپت", desc: "درخواست، متن یا سوالی که کاربر برای هدایت مدل هوش مصنوعی مولد وارد می‌کند." },
+            { id: 90, cat: 3, en: "Prompt Engineering", pr: "پرامپت انجینیرینگ", fa: "مهندسی پرامپت", desc: "هنر طراحی و بهینه‌سازی دقیق پرامپت‌ها برای دریافت دقیق‌ترین و مرتبط‌ترین پاسخ از مدل." },
+
+            // Page 4
+            { id: 91, cat: 4, en: "Computer Vision", pr: "کامپیوتر ویژن", fa: "بینایی ماشین", desc: "حوزه‌ای که به رایانه‌ها امکان استخراج اطلاعات و فهم تصاویر و ویدیوها را می‌دهد." },
+            { id: 92, cat: 4, en: "Image Segmentation", pr: "ایمیج سگمنتیشن", fa: "بخش‌بندی تصویر", desc: "تقسیم تصاویر دیجیتال به بخش‌ها یا پیکسل‌های مجزای معنادار برای پردازش دقیق‌تر." },
+            { id: 93, cat: 4, en: "Object Detection", pr: "آبجکت دیتکشن", fa: "تشخیص اشیاء", desc: "یافتن مکان اشیاء مختلف در تصویر، ترسیم کادر دور آن‌ها و برچسب‌گذاری کلاسشان." },
+            { id: 94, cat: 4, en: "Face Recognition", pr: "فیس ریکاگنیشن", fa: "شناسایی چهره", desc: "تشخیص و تایید هویت افراد از طریق تحلیل ویژگی‌های ساختاری صورت در تصویر." },
+            { id: 95, cat: 4, en: "Edge Detection", pr: "اج دیتکشن", fa: "لبه‌یابی", desc: "یافتن مرزها، خطوط و نقاطی از تصویر که در آن‌ها تغییر ناگهانی در میزان روشنایی رخ داده است." },
+            { id: 96, cat: 4, en: "Bounding Box", pr: "باوندینگ باکس", fa: "کادر احاطه‌کننده", desc: "مستطیل فرضی که دور شیء شناسایی‌شده در تصویر کشیده می‌شود تا موقعیت آن مشخص شود." },
+            { id: 97, cat: 4, en: "Pixel", pr: "پیکسل", fa: "پیکسل", desc: "کوچک‌ترین جزء یا نقطه تشکیل‌دهنده یک تصویر دیجیتال روی صفحه نمایش." },
+            { id: 98, cat: 4, en: "Resolution", pr: "رزولوشن", fa: "وضوح تصویر", desc: "میزان تراکم و تعداد پیکسل‌های به کار رفته در طول و عرض یک تصویر دیجیتالی." },
+            { id: 99, cat: 4, en: "Grayscale", pr: "گری‌اسکیل", fa: "مقیاس خاکستری", desc: "تصویری تک کاناله که فقط حاوی شدت‌های نوری از سیاه مطلق تا سفید مطلق است." },
+            { id: 100, cat: 4, en: "RGB", pr: "آر‌جی‌بی", fa: "سیستم رنگی RGB", desc: "نمایش تصاویر رنگی با ترکیب سه کانال اصلی قرمز (Red)، سبز (Green) و آبی (Blue)." },
+            { id: 101, cat: 4, en: "Filter / Kernel", pr: "فیلتر / کرنل", fa: "ماتریس فیلتر / کرنل", desc: "یک جدول کوچک عددی که روی پیکسل‌های تصویر اصلی می‌لغزد تا لبه‌ها یا الگوها را استخراج کند." },
+            { id: 102, cat: 4, en: "Convolution", pr: "کانولوشن", fa: "هم‌بافت / پیچش", desc: "عمل ریاضی ضرب پیکسل‌به‌پیکسل فیلتر در بخش‌های مختلف تصویر جهت استخراج ویژگی." },
+            { id: 103, cat: 4, en: "Max Pooling", pr: "مکس پولینگ", fa: "بیشینه‌گیری", desc: "انتخاب بزرگ‌ترین عدد پیکسل در یک پنجره مشخص برای کاهش حجم نقشه ویژگی‌ها." },
+            { id: 104, cat: 4, en: "Feature Map", pr: "فیچر مپ", fa: "نقشه ویژگی", desc: "ماتریس خروجی حاصل از اعمال فیلترهای کانولوشنی بر روی تصویر ورودی." },
+            { id: 105, cat: 4, en: "Optical Character Recognition", pr: "اپتیکال کرکتر ریکاگنیشن", fa: "نویسه‌خوان نوری (OCR)", desc: "فناوری تبدیل تصاویر اسناد متنی اسکن شده یا دست‌نویس به فایل‌های متنی قابل ویرایش." },
+            { id: 106, cat: 4, en: "Image Augmentation", pr: "ایمیج آگمنتیشن", fa: "غنی‌سازی تصویر", desc: "ایجاد تغییرات تصادفی مانند چرخش، برش و تغییر نور در تصاویر برای گسترش و تنوع بخشیدن به دیتاست." },
+            { id: 107, cat: 4, en: "Latent Diffusion", pr: "لیتنت دیفیوژن", fa: "انتشار پنهان", desc: "فرآیند تولید تصویر با کیفیت بالا از طریق حذف تدریجی و الگوریتمی نویز در فضای پنهان." },
+            { id: 108, cat: 4, en: "Style Transfer", pr: "استایل ترنسفر", fa: "انتقال سبک", desc: "ترکیب ویژگی‌های محتوایی یک عکس معمولی با سبک هنری و رنگ‌آمیزی یک تابلوی نقاشی دیگر." },
+            { id: 109, cat: 4, en: "Image Annotation", pr: "ایمیج انوتیشن", fa: "برچسب‌گذاری تصویر", desc: "فرآیند کشیدن کادرها یا مشخص کردن پیکسل‌های اشیاء داخل تصویر جهت آموزش مدل‌های بینایی." },
+            { id: 110, cat: 4, en: "Keypoint Detection", pr: "کی‌پوینت دیتکشن", fa: "تشخیص نقاط کلیدی", desc: "شناسایی و ردیابی خودکار نقاط اصلی مفاصل بدن یا جزئیات دقیق صورت روی تصویر." },
+            { id: 111, cat: 4, en: "Semantic Segmentation", pr: "سیمنتیک سگمنتیشن", fa: "بخش‌بندی معنایی", desc: "دسته‌بندی تک‌تک پیکسل‌های تصویر بر اساس کلاس کلی شیء بدون تفکیک نمونه‌های مشابه." },
+            { id: 112, cat: 4, en: "Instance Segmentation", pr: "اینستنس سگمنتیشن", fa: "بخش‌بندی نمونه‌ها", desc: "پیشرفته‌ترین نوع بخش‌بندی تصویر که پیکسل‌های هر شیء مشابه را از شیء دیگر تفکیک می‌کند." },
+            { id: 113, cat: 4, en: "3D Reconstruction", pr: "تری‌دی ریکا‌نستراکشن", fa: "بازسازی سه‌بعدی", desc: "تولید مدل‌های سه‌بعدی دیجیتالی از روی تصاویر دوبعدی متوالی و دوربینی." },
+            { id: 114, cat: 4, en: "Optical Flow", pr: "اپتیکال فلو", fa: "جریان نوری", desc: "تکنیک تشخیص و بردارسازی جهت و سرعت حرکت اشیاء در فریم‌های متوالی ویدیو." },
+            { id: 115, cat: 4, en: "Image Histogram", pr: "ایمیج هیستوگرام", fa: "هیستوگرام تصویر", desc: "نموداری که توزیع فراوانی و شدت‌های روشنایی پیکسل‌های یک تصویر را نشان می‌دهد." },
+            { id: 116, cat: 4, en: "Noise Reduction", pr: "نویز رداکشن", fa: "کاهش نویز", desc: "به‌کارگیری فیلترهای صاف‌کننده جهت حذف پیکسل‌های خراب، نوسانات نوری و ناخواسته تصویر." },
+            { id: 117, cat: 4, en: "Thresholding", pr: "ترشهولدینگ", fa: "آستانه‌گذاری", desc: "تبدیل تصاویر رنگی یا خاکستری به تصویر دو بیتی (سیاه و سفید خالص) بر اساس یک مرز روشنایی مشخص." },
+            { id: 118, cat: 4, en: "Morphological Operations", pr: "مورفولوژیکال اپریشنز", fa: "عملیات ریخت‌شناسی", desc: "اعمال ریاضی بر پایه شکل و هندسه اشیاء تصویر مانند فرسایش (Erosion) و گسترش (Dilation)." },
+            { id: 119, cat: 4, en: "Affine Transformation", pr: "افاین ترنسفورمیشن", fa: "تبدیل همگون", desc: "تبدیلات هندسی شامل چرخش، تغییر مقیاس و انتقال تصویر با حفظ توازی خطوط اصلی." },
+            { id: 120, cat: 4, en: "Deep Fake", pr: "دیپ فیک", fa: "جعل عمیق", desc: "تولید ویدیوها و صداهای فوق‌العاده شبیه‌سازی‌شده و جعلی از چهره و صدای افراد با استفاده از مدل‌های عمیق." },
+
+            // Page 5
+            { id: 121, cat: 5, en: "Data Science", pr: "دیتا ساینس", fa: "علم داده", desc: "حوزه بین‌رشته‌ای استخراج دانش، الگو و بینش ارزشمند از میان حجم عظیمی از داده‌های گوناگون." },
+            { id: 122, cat: 5, en: "Big Data", pr: "بیگ دیتا", fa: "کلان داده", desc: "داده‌های بسیار حجیم، پرسرعت و متنوعی که پردازش آن‌ها با سیستم‌های سنتی غیرممکن است." },
+            { id: 123, cat: 5, en: "Data Mining", pr: "دیتا ماینینگ", fa: "داده‌کاوی", desc: "فرآیند کشف الگوها، روندهای پنهان و روابط مجهول در پایگاه‌های داده بزرگ." },
+            { id: 124, cat: 5, en: "Data Wrangling", pr: "دیتا رانگلینگ", fa: "آماده‌سازی داده‌ها", desc: "فرآیند تبدیل داده‌های خام، کثیف و پراکنده به قالب‌های استاندارد و بهینه برای تحلیل." },
+            { id: 125, cat: 5, en: "Data Cleaning", pr: "دیتا کلینینگ", fa: "پاک‌سازی داده‌ها", desc: "شناسایی و حذف رکوردهای تکراری، اطلاعات نادرست، پرت و فیلدهای خالی از مجموعه داده." },
+            { id: 126, cat: 5, en: "Outlier", pr: "اوت‌لایر", fa: "داده پرت", desc: "رکوردهایی در مجموعه داده که تفاوت بسیار فاحش و غیرطبیعی با کل اعضای گروه دارند." },
+            { id: 127, cat: 5, en: "Missing Values", pr: "میسینگ ولیوز", fa: "مقادیر گم‌شده", desc: "ستون‌ها یا ردیف‌هایی از پایگاه داده که مقداری در آن‌ها ثبت نشده است." },
+            { id: 128, cat: 5, en: "Mean", pr: "مین", fa: "میانگین ریاضی", desc: "حاصل‌جمع کل مقادیر عددی یک ستون تقسیم بر تعداد کل نمونه‌های آن." },
+            { id: 129, cat: 5, en: "Median", pr: "میدین", fa: "میانه", desc: "مقداری که پس از مرتب‌سازی داده‌ها دقیقاً در وسط مجموعه قرار می‌گیرد." },
+            { id: 130, cat: 5, en: "Mode", pr: "مود", fa: "نما / مد", desc: "مقداری که بیشترین میزان تکرار را در میان کل داده‌ها به خود اختصاص داده است." },
+            { id: 131, cat: 5, en: "Standard Deviation", pr: "استاندارد دوییشن", fa: "انحراف معیار", desc: "معیار سنجش پراکندگی داده‌ها و فاصله متوسط هر عضو نسبت به میانگین جامعه." },
+            { id: 132, cat: 5, en: "Correlation", pr: "کورلیشن", fa: "همبستگی", desc: "رابطه آماری و جهت‌دار بین دو متغیر گوناگون (رابطه مستقیم یا معکوس)." },
+            { id: 133, cat: 5, en: "Covariance", pr: "کوواریانس", fa: "کوواریانس", desc: "سنجش جهت رابطه خطی بین دو متغیر تصادفی متمایز." },
+            { id: 134, cat: 5, en: "Hypothesis Testing", pr: "هایپوتسیس تستینگ", fa: "آزمون فرضیه", desc: "روشی آماری برای ارزیابی فرضیات ادعا شده درباره جامعه بر اساس نمونه آماری." },
+            { id: 135, cat: 5, en: "p-value", pr: "پی ولیو", fa: "مقدار احتمال (p-value)", desc: "شاخص آماری برای رد یا پذیرش فرضیه صفر؛ مقادیر کمتر از ۰.۰۵ معمولاً معنی‌دار تلقی می‌شوند." },
+            { id: 136, cat: 5, en: "Null Hypothesis", pr: "نال هایپوتسیس", fa: "فرضیه صفر (H0)", desc: "فرضیه‌ای پیش‌فرض که ادعا می‌کند هیچ رابطه، تفاوت یا اثری بین متغیرها وجود ندارد." },
+            { id: 137, cat: 5, en: "Alternative Hypothesis", pr: "آلترنتیو هایپوتسیس", fa: "فرضیه مقابل (H1)", desc: "فرضیه اصلی که پژوهشگر برای اثبات وجود اثر یا رابطه بین متغیرها ارائه می‌دهد." },
+            { id: 138, cat: 5, en: "Normal Distribution", pr: "نرمال دیستریبیوشن", fa: "توزیع نرمال", desc: "توزیع آماری متقارن و زنگوله‌ای شکل که در آن بیشتر مقادیر نزدیک به میانگین متمرکز هستند." },
+            { id: 139, cat: 5, en: "Population", pr: "پاپلیشن", fa: "جامعه آماری", desc: "کل اعضای یک گروه یا پدیده‌ای بزرگ که مایل به تحلیل رفتار آماری آن‌ها هستیم." },
+            { id: 140, cat: 5, en: "Sample", pr: "سمپل", fa: "نمونه آماری", desc: "زیرمجموعه کوچکی از جامعه آماری که برای بررسی و استنتاج به کل جامعه انتخاب می‌شود." },
+            { id: 141, cat: 5, en: "Exploratory Data Analysis", pr: "اکسپلوراتوری دیتا آنالیز", fa: "تحلیل اکتشافی داده‌ها", desc: "بررسی اولیه و خلاصه کردن ویژگی‌های بصری داده‌ها جهت فرموله‌کردن فرضیات (EDA)." },
+            { id: 142, cat: 5, en: "Histogram", pr: "هیستوگرام", fa: "نمودار هیستوگرام", desc: "نمودار ستونی که توزیع فراوانی داده‌های عددی پیوسته را به تصویر می‌کشد." },
+            { id: 143, cat: 5, en: "Scatter Plot", pr: "اسکتر پلات", fa: "نمودار پراکندگی", desc: "نموداری دو بعدی برای بررسی بصری رابطه، همبستگی و پراکندگی بین دو متغیر." },
+            { id: 144, cat: 5, en: "Feature Engineering", pr: "فیچر انجینیرینگ", fa: "مهندسی ویژگی", desc: "استفاده از دانش حوزه برای ساخت ویژگی‌های جدید و کارآمدتر از روی داده‌های خام." },
+            { id: 145, cat: 5, en: "Dimensionality Reduction", pr: "دایمنشنالیتی رداکشن", fa: "کاهش ابعاد", desc: "کاهش تعداد متغیرهای ورودی با هدف ساده‌سازی محاسبات و حفظ اطلاعات اصلی." },
+            { id: 146, cat: 5, en: "Principal Component Analysis", pr: "پرینسیپال کامپوننت آنالیز", fa: "تحلیل مؤلفه‌های اصلی (PCA)", desc: "روش ریاضی بسیار محبوب برای کاهش ابعاد داده‌های خطی چندبعدی." },
+            { id: 147, cat: 5, en: "Imbalanced Data", pr: "ایمبلنسد دیتا", fa: "داده‌های نامتوازن", desc: "عدم تعادل شدید بین تعداد نمونه‌های موجود در کلاس‌های گوناگون هدف آموزش." },
+            { id: 148, cat: 5, en: "Data Pipeline", pr: "دیتا پایپلاین", fa: "خط لوله داده", desc: "مسیر خودکار انتقال، پردازش و تبدیل داده‌ها از سیستم‌های مبدا به پایگاه‌های هدف." },
+            { id: 149, cat: 5, en: "ETL", pr: "ای‌تی‌ال", fa: "فرآیند ETL", desc: "مخفف استخراج (Extract)، تبدیل (Transform) و بارگذاری داده‌ها (Load) در انبار داده." },
+            { id: 150, cat: 5, en: "Data Lake", pr: "دیتا لیک", fa: "دریاچه داده", desc: "مخزن بزرگ و انعطاف‌پذیری برای ذخیره مقادیر زیادی از داده‌های خام و بدون ساختار اولیه." },
+
+            // Page 6
+            { id: 151, cat: 6, en: "Programming Language", pr: "پروگرمینگ لنگویج", fa: "زبان برنامه‌نویسی", desc: "یک زبان رسمی شامل مجموعه دستورالعمل‌هایی برای برقراری ارتباط با رایانه‌ها." },
+            { id: 152, cat: 6, en: "Variable", pr: "وریبل", fa: "متغیر", desc: "نام یا خانه‌ای مشخص در حافظه برای نگه‌داری داده‌هایی با قابلیت تغییر در طول اجرای برنامه." },
+            { id: 153, cat: 6, en: "Constant", pr: "کانستنت", fa: "ثابت", desc: "مقداری در حافظه که پس از یک بار تعریف شدن، هرگز در طول برنامه تغییر نمی‌کند." },
+            { id: 154, cat: 6, en: "Data Type", pr: "دیتا تایپ", fa: "نوع داده", desc: "طبقه‌بندی داده‌ها که مشخص می‌کند چه نوع عملیاتی روی آن فیلد قابل اجرا است." },
+            { id: 155, cat: 6, en: "Integer", pr: "اینتجر", fa: "عدد صحیح", desc: "نوع داده‌ای شامل اعداد مثبت، منفی و صفر بدون بخش اعشاری." },
+            { id: 156, cat: 6, en: "Float", pr: "فلوت", fa: "عدد اعشاری", desc: "نوع داده‌ای برای نگه‌داری و نمایش مقادیر اعشاری و کسری در حافظه." },
+            { id: 157, cat: 6, en: "String", pr: "استرینگ", fa: "رشته / متن", desc: "توالی به هم پیوسته‌ای از کاراکترها و نویسه‌های متنی." },
+            { id: 158, cat: 6, en: "Boolean", pr: "بولین", fa: "مقدار منطقی", desc: "نوع داده‌ای خاص که فقط قادر به ذخیره دو مقدار درستی (True) یا نادرستی (False) است." },
+            { id: 159, cat: 6, en: "Array", pr: "اری", fa: "آرایه", desc: "ساختار داده پایه برای ذخیره متوالی عناصر با نوع داده کاملاً یکسان." },
+            { id: 160, cat: 6, en: "List", pr: "لیست", fa: "لیست", desc: "ساختار داده داینامیک و منعطف برای نگه‌داری ترتیبی از مقادیر گوناگون." },
+            { id: 161, cat: 6, en: "Tuple", pr: "تاپل", fa: "چندتایی مرتب (تاپل)", desc: "نوعی لیست با طول و مقادیر ثابت و غیرقابل تغییر در طول برنامه." },
+            { id: 162, cat: 6, en: "Dictionary", pr: "دیکشنری", fa: "دیکشنری / نگاشت", desc: "ساختار داده‌ای برای ذخیره اطلاعات به صورت زوج‌های کلید و مقدار (Key-Value)." },
+            { id: 163, cat: 6, en: "Set", pr: "ست", fa: "مجموعه", desc: "مجموعه‌ای غیرتکراری و بدون نظم خاص از آیتم‌های گوناگون داده‌ای." },
+            { id: 164, cat: 6, en: "Class", pr: "کلاس", fa: "کلاس", desc: "طرح اولیه یا الگویی استاندارد برای تعریف اشیاء جدید در مدل شیءگرایی." },
+            { id: 165, cat: 6, en: "Object", pr: "آبجکت", fa: "شیء", desc: "نمونه عینی و ساخته‌شده‌ای از روی یک کلاس در برنامه‌نویسی." },
+            { id: 166, cat: 6, en: "Method", pr: "متد", fa: "متد / رفتار کلاس", desc: "تابعی که درون یک کلاس تعریف شده و رفتار اشیاء آن کلاس را مشخص می‌کند." },
+            { id: 167, cat: 6, en: "Function", pr: "فانکشن", fa: "تابع", desc: "بلاک کدی با نام مشخص و قابلیت فراخوانی مکرر برای انجام کاری معین." },
+            { id: 168, cat: 6, en: "Parameter", pr: "پارامتر", fa: "پارامتر تابع", desc: "متغیرهایی که در زمان نوشتن بدنه تابع به عنوان ورودی‌های فرضی تعریف می‌شوند." },
+            { id: 169, cat: 6, en: "Argument", pr: "آرگومان", fa: "آرگومان", desc: "مقادیر واقعی که در زمان فراخوانی نهایی تابع به آن پاس داده می‌شوند." },
+            { id: 170, cat: 6, en: "Loop", pr: "لوپ", fa: "حلقه تکرار", desc: "دستوری در کد نویسی برای تکرار مکرر کدهای داخل بلوک تا زمان برآورده شدن شرط." },
+            { id: 171, cat: 6, en: "Conditional Statement", pr: "کاندیشنال استیتمنت", fa: "دستور شرطی", desc: "تغییر جریان اجرای برنامه با کلمات کلیدی نظیر `if` و `else` بر اساس شرط." },
+            { id: 172, cat: 6, en: "Recursion", pr: "ریکرژن", fa: "بازگشت‌پذیری", desc: "تکنیکی که در آن یک تابع در بدنه خود، خودش را فراخوانی می‌کند." },
+            { id: 173, cat: 6, en: "Pointer", pr: "پوینتر", fa: "اشاره‌گر", desc: "متغیری ویژه که آدرس فیزیکی متغیر دیگری را در حافظه رم نگه می‌دارد." },
+            { id: 174, cat: 6, en: "Memory Allocation", pr: "مموری الوکیشن", fa: "تخصیص حافظه", desc: "رزرو کردن موقت یا دائم فضا در حافظه سیستم (RAM) برای ذخیره متغیرها." },
+            { id: 175, cat: 6, en: "Garbage Collection", pr: "گاربیج کالکشن", fa: "پاک‌سازی زباله‌های حافظه", desc: "مکانیزم خودکار سیستم‌عامل یا مفسر برای آزاد کردن متغیرهای بلااستفاده رم." },
+            { id: 176, cat: 6, en: "Scope", pr: "اسکوپ", fa: "محدوده دسترسی (اسکوپ)", desc: "بخشی از بدنه کد که متغیر در آن تعریف شده و زنده و قابل استفاده است." },
+            { id: 177, cat: 6, en: "Exception Handling", pr: "اکسپشن هندلینگ", fa: "مدیریت استثناها", desc: "پیش‌بینی و مدیریت خطاهای زمان اجرا به نحوی که برنامه متوقف نشود." },
+            { id: 178, cat: 6, en: "Bug", pr: "باگ", fa: "باگ / خطای کد", desc: "هرگونه اشکال، نقص یا اشتباه در برنامه‌نویسی که مانع خروجی درست سیستم شود." },
+            { id: 179, cat: 6, en: "Debugging", pr: "دیباگینگ", fa: "عیب‌یابی / دیباگ", desc: "فرآیند پیدا کردن، ردیابی و برطرف کردن باگ‌های موجود در برنامه." },
+            { id: 180, cat: 6, en: "Compiler", pr: "کامپایلر", fa: "کامپایلر", desc: "مترجم نرم‌افزاری که تمام کد را یک‌جا به کدهای سطح پایین ماشین تبدیل می‌کند." },
+
+            // Page 7
+            { id: 181, cat: 7, en: "Software Engineering", pr: "سافت‌ور انجینیرینگ", fa: "مهندسی نرم‌افزار", desc: "استفاده از اصول مهندسی و علمی برای ساخت، طراحی و نگه‌داری سیستم‌های نرم‌افزاری." },
+            { id: 182, cat: 7, en: "SDLC", pr: "اس‌دی‌ال‌سی", fa: "چرخه حیات توسعه نرم‌افزار", desc: "مخفف Software Development Life Cycle شامل مراحل تحلیل تا پیاده‌سازی و نگه‌داری." },
+            { id: 183, cat: 7, en: "Agile", pr: "اجایل", fa: "متدولوژی چابک (Agile)", desc: "روش توسعه نرم‌افزاری منعطف بر اساس تکرارهای کوتاه و پاسخ سریع به تغییرات." },
+            { id: 184, cat: 7, en: "Scrum", pr: "اسکرام", fa: "فریم‌ورک اسکرام", desc: "یک چارچوب چابک محبوب برای مدیریت پروژه‌های تیمی در زمان‌های محدود." },
+            { id: 185, cat: 7, en: "Version Control System", pr: "ورژن کنترل سیستم", fa: "سیستم کنترل نسخه", desc: "ابزاری مانند Git برای پیگیری دقیق تمام تغییرات در تاریخچه پروژه." },
+            { id: 186, cat: 7, en: "Repository", pr: "ریپازیتوری", fa: "مخزن (ریپازیتوری)", desc: "فضای ذخیره‌سازی ابری یا لوکال پروژه که کدهای گیت در آن نگه‌داری می‌شوند." },
+            { id: 187, cat: 7, en: "Commit", pr: "کامیت", fa: "ثبت رسمی (Commit)", desc: "ذخیره کردن رسمی تغییرات اعمال شده روی پروژه در گیت همراه با پیام توصیفی." },
+            { id: 188, cat: 7, en: "Branch", pr: "برنچ", fa: "شاخه انشعابی", desc: "انشعابی مستقل از کد اصلی برای پیاده‌سازی بی‌خطر ویژگی‌های جدید." },
+            { id: 189, cat: 7, en: "Merge", pr: "مرج", fa: "ادغام کردن", desc: "ترکیب و اعمال کدهای نوشته شده از یک شاخه فرعی به درون شاخه اصلی گیت." },
+            { id: 190, cat: 7, en: "Pull Request", pr: "پول ریکوئست", fa: "درخواست ادغام (PR)", desc: "درخواست رسمی برای بازبینی و اجازه ادغام کدهای شما به مخزن اصلی گیت." },
+            { id: 191, cat: 7, en: "Conflict", pr: "کانفلیکت", fa: "تداخل خطوط کد (Conflict)", desc: "وقوع مغایرت زمانی که دو توسعه‌دهنده به طور مستقل یک خط کد مشابه را تغییر داده باشند." },
+            { id: 192, cat: 7, en: "Code Review", pr: "کد ریویو", fa: "بازبینی کد", desc: "بررسی کدهای نوشته شده توسط هم‌تیمی‌ها برای یافتن باگ‌ها و ارتقای استانداردها." },
+            { id: 193, cat: 7, en: "Refactoring", pr: "ریفکتورینگ", fa: "بازنویسی و اصلاح ساختار", desc: "بازنویسی بخش‌هایی از کد بدون دستکاری رفتار خروجی آن جهت خوانایی بیشتر." },
+            { id: 194, cat: 7, en: "Design Pattern", pr: "دیزاین پترن", fa: "الگوی طراحی", desc: "راه‌حل‌های استاندارد، تایید شده و بهینه برای حل مشکلات برنامه‌نویسی رایج." },
+            { id: 195, cat: 7, en: "OOP", pr: "او‌او‌پی", fa: "برنامه‌نویسی شیءگرا", desc: "سبک توسعه نرم‌افزار بر پایه کلاس‌ها و اشیاء شبیه‌سازی شده دنیای واقعی (Object-Oriented)." },
+            { id: 196, cat: 7, en: "Functional Programming", pr: "فانکشنال پروگرمینگ", fa: "برنامه‌نویسی تابعی", desc: "پاردایم برنامه‌نویسی بر پایه توابع ریاضی خالص بدون تغییر در داده‌های بیرونی." },
+            { id: 197, cat: 7, en: "Inheritance", pr: "اینهریتنس", fa: "ارث‌بری / توارث", desc: "انتقال خودکار ویژگی‌ها و متدهای یک کلاس والد به کلاس‌های فرزند." },
+            { id: 198, cat: 7, en: "Polymorphism", pr: "پلیمورفیسم", fa: "چندریختی", desc: "قابلیت استفاده از یک نام و رابط واحد برای رفتارهای گوناگون در کلاس‌های مختلف." },
+            { id: 199, cat: 7, en: "Encapsulation", pr: "انکپسولیشن", fa: "کپسوله‌سازی", desc: "محصور کردن داده‌های حساس کلاس و ممانعت از دسترسی مستقیم بیرونی به آن‌ها." },
+            { id: 200, cat: 7, en: "Abstraction", pr: "ابسترکشن", fa: "انتزاع / ابسترکشن", desc: "نمایش جزئیات کلی و رفتارهای اساسی شیء بدون افشای پیچیدگی‌های فنی درونی." },
+            { id: 201, cat: 7, en: "Interface", pr: "اینترفیس", fa: "رابط / واسط کاربری", desc: "ساختاری حاوی امضای متدها بدون تعریف بدنه که کلاس‌ها ملزم به پیاده‌سازی آن هستند." },
+            { id: 202, cat: 7, en: "API", pr: "ای‌پی‌آی", fa: "رابط برنامه‌نویسی (API)", desc: "پل ارتباطی استاندارد که دو سیستم نرم‌افزاری کاملاً مستقل را به هم متصل می‌کند." },
+            { id: 203, cat: 7, en: "Framework", pr: "فریم‌ورک", fa: "چارچوب کاری / فریم‌ورک", desc: "مجموعه عظیمی از کدهای آماده و ساختارمند که اسکلت کلی برنامه را تعیین می‌کند." },
+            { id: 204, cat: 7, en: "Library", pr: "لایبرری", fa: "کتابخانه کد", desc: "مجموعه‌ای از کدهای نوشته شده از قبل برای حل یک مسئله خاص بدون تحمیل ساختار کلی." },
+            { id: 205, cat: 7, en: "SDK", pr: "اس‌دی‌کی", fa: "کیت توسعه نرم‌افزار", desc: "مجموعه کاملی از ابزارها، کتابخانه‌ها و داکیومنت‌ها برای برنامه نویسی روی پلتفرم خاص." },
+            { id: 206, cat: 7, en: "Dependency", pr: "دیپندنسی", fa: "وابستگی کدی", desc: "نیاز یک پکیج یا قطعه کد به اجرای پکیج‌های توسعه‌یافته دیگر برای عملکرد درست." },
+            { id: 207, cat: 7, en: "Package Manager", pr: "پکیج منیجر", fa: "مدیریت بسته‌ها", desc: "ابزارهایی مانند npm یا pip جهت مدیریت نصب، آپدیت و حذف کتابخانه‌ها." },
+            { id: 208, cat: 7, en: "Unit Testing", pr: "یونیت تستینگ", fa: "تست واحد", desc: "تست و اعتبارسنجی خودکار کوچک‌ترین بخش‌های مستقل کدهای پروژه نظیر توابع منفرد." },
+            { id: 209, cat: 7, en: "Integration Testing", pr: "اینتگریشن تستینگ", fa: "تست ادغام", desc: "آزمون صحت عملکرد همزمان و یکپارچه چند لایه یا سیستم به هم متصل." },
+            { id: 210, cat: 7, en: "Legacy Code", pr: "لگسی کد", fa: "کد قدیمی ارثی", desc: "کدهای قدیمی موجود در یک سیستم که نگه‌داری و توسعه آن‌ها بسیار سخت و پر چالش است." },
+
+            // Page 8
+            { id: 211, cat: 8, en: "Web Development", pr: "وب دولوپمنت", fa: "توسعه وب", desc: "مجموعه فرآیندهای برنامه‌نویسی، طراحی و پیکربندی انواع وب‌سایت‌ها." },
+            { id: 212, cat: 8, en: "Frontend", pr: "فرانت‌اند", fa: "توسعه سمت کاربر", desc: "برنامه‌نویسی ظاهر بصری، دکمه‌ها و المان‌هایی که مستقیماً توسط کاربر دیده می‌شود." },
+            { id: 213, cat: 8, en: "Backend", pr: "بک‌اند", fa: "توسعه سمت سرور", desc: "توسعه کدهای پشت‌صحنه، دیتابیس، منطق بیزینس و محاسباتی سرور." },
+            { id: 214, cat: 8, en: "Fullstack", pr: "فول‌استک", fa: "برنامه‌نویس فول‌استک", desc: "توسعه‌دهنده‌ای که توانایی کدنویسی همزمان بخش‌های کلاینت (فرانت) و سرور (بک) را دارد." },
+            { id: 215, cat: 8, en: "DOM", pr: "دام", fa: "مدل شیءگرای سند وب", desc: "ساختار درختی استاندارد عناصر صفحات وب که با جاوااسکریپت کنترل و داینامیک می‌شوند." },
+            { id: 216, cat: 8, en: "Database", pr: "دیتابیس", fa: "پایگاه داده / دیتابیس", desc: "مخزن ساختاریافته و سیستمی برای ذخیره‌سازی، ویرایش و مدیریت حجم بالای اطلاعات." },
+            { id: 217, cat: 8, en: "Relational Database", pr: "ریلیشنال دیتابیس", fa: "پایگاه داده رابطه‌ای", desc: "دیتابیسی که داده‌ها را در قالب جدول‌های متصل به هم با ردیف و ستون ذخیره می‌کند." },
+            { id: 218, cat: 8, en: "SQL", pr: "اس‌کیوال", fa: "زبان کوئری‌نویسی", desc: "زبان پرس‌وجوی ساختاریافته برای ویرایش و واکشی اطلاعات از دیتابیس‌های رابطه‌ای." },
+            { id: 219, cat: 8, en: "NoSQL", pr: "نو اس‌کیوال", fa: "دیتابیس غیررابطه‌ای", desc: "دیتابیس‌هایی بدون ساختار جدولی سنتی، مناسب برای داده‌های توزیع‌شده و داینامیک." },
+            { id: 220, cat: 8, en: "Query", pr: "کوئری", fa: "پرس‌وجو (Query)", desc: "دستوری ارسال‌شده به پایگاه داده برای خواندن، حذف یا تغییر اطلاعات." },
+            { id: 221, cat: 8, en: "Schema", pr: "اسکیما", fa: "طرح کلی / اسکیما", desc: "ساختار منطقی، قوانین و روابط تعریف‌شده برای جداول پایگاه داده." },
+            { id: 222, cat: 8, en: "Indexing", pr: "ایندکسینگ", fa: "شاخص‌گذاری", desc: "فهرست‌بندی برای افزایش شدید سرعت پیدا کردن و خواندن رکوردهای دیتابیس." },
+            { id: 223, cat: 8, en: "Primary Key", pr: "پرایمری کی", fa: "کلید اصلی", desc: "ستون یا مشخصه‌ای که رکوردهای یک جدول را به طور منحصربه‌فرد از هم متمایز می‌کند." },
+            { id: 224, cat: 8, en: "Foreign Key", pr: "فورین کی", fa: "کلید خارجی", desc: "ستونی در یک جدول که به کلید اصلی در جدول دیگر اشاره و رابطه ایجاد می‌کند." },
+            { id: 225, cat: 8, en: "Serialization", pr: "سریالایزیشن", fa: "سریال‌سازی داده‌ها", desc: "تبدیل اشیاء مقیم در حافظه رم به فرمت متنی (مانند JSON) برای ذخیره یا انتقال روی شبکه." },
+            { id: 226, cat: 8, en: "Deserialization", pr: "دی‌سریالایزیشن", fa: "بازسازی اشیاء (دیسریالایز)", desc: "تبدیل مجدد متون سریال شده به اشیاء زنده در برنامه‌نویسی." },
+            { id: 227, cat: 8, en: "JSON", pr: "جیسون", fa: "فرمت تبادل داده JSON", desc: "فرمت متنی سبک و استاندارد برای ارسال اطلاعات میان کلاینت و سرور وب." },
+            { id: 228, cat: 8, en: "HTTP", pr: "اچ‌تی‌تی‌پی", fa: "پروتکل انتقال وب", desc: "پروتکل استاندارد و امن تبادل اطلاعات صفحات و اسناد در اینترنت." },
+            { id: 229, cat: 8, en: "REST", pr: "رست", fa: "معماری REST", desc: "معماری سبک تبادل اطلاعات وب‌سرویس‌ها بر اساس متدهای استاندارد HTTP." },
+            { id: 230, cat: 8, en: "GraphQL", pr: "گراف‌کیوال", fa: "گراف‌کیوال", desc: "زبان مدرن کوئری وب‌سرویس‌ها جهت دریافت دقیق دیتای مورد نیاز توسط کلاینت." },
+            { id: 231, cat: 8, en: "Authentication", pr: "اوتنتیکیشن", fa: "احراز هویت", desc: "فرآیند تایید هویت حقیقی ادعا شده توسط کاربر مانند نام کاربری و پسورد." },
+            { id: 232, cat: 8, en: "Authorization", pr: "اتورایزیشن", fa: "تعیین سطح دسترسی", desc: "مشخص کردن مجوزهای کاربر تایید شده برای کار با بخش‌های مختلف سیستم." },
+            { id: 233, cat: 8, en: "Encryption", pr: "اینکریپشن", fa: "رمزنگاری", desc: "تبدیل داده‌های خوانا به رمزهای نامفهوم جهت بالا بردن امنیت در زمان انتقال." },
+            { id: 234, cat: 8, en: "Decryption", pr: "دیکریپشن", fa: "رمزگشایی", desc: "تبدیل مجدد کدهای رمزنگاری شده نامفهوم به حالت متنی اولیه و خوانا." },
+            { id: 235, cat: 8, en: "Hashing", pr: "هشینگ", fa: "هش کردن یک‌طرفه", desc: "فرآیند تبدیل یک‌طرفه و غیرقابل بازگشت متن به کد امنیتی با اندازه ثابت." },
+            { id: 236, cat: 8, en: "Cyberattack", pr: "سایبر اتک", fa: "حمله سایبری", desc: "تلاشی مخرب توسط مهاجمین برای تخریب، نفوذ یا سرقت دیتای یک سیستم." },
+            { id: 237, cat: 8, en: "Firewall", pr: "فایروال", fa: "دیوار آتش (فایروال)", desc: "سیستم یا نرم‌افزار امنیتی برای پایش، فیلتر و رد کردن ترافیک مشکوک شبکه." },
+            { id: 238, cat: 8, en: "SQL Injection", pr: "اس‌کیوال اینجکشن", fa: "تزریق کدهای مخرب SQL", desc: "نوعی حمله خطرناک که از طریق فرم‌های ناامن، کدهای مخرب را به دیتابیس تزریق می‌کند." },
+            { id: 239, cat: 8, en: "CSRF", pr: "سی‌اس‌آراف", fa: "آسیب‌پذیری CSRF", desc: "نوعی جعل درخواست وب که در آن مهاجم کاربر را ناخواسته به انجام رفتارهای مخرب هدایت می‌کند." },
+            { id: 240, cat: 8, en: "XSS", pr: "اکس‌اس‌اس", fa: "حمله تزریق اسکریپت (XSS)", desc: "تزریق اسکریپت‌های مخرب مرورگر به صفحات وبِ بازدید شده توسط دیگر کاربران." },
+
+            // Page 9
+            { id: 241, cat: 9, en: "Cloud Computing", pr: "کلاود کامپیوتینگ", fa: "رایانش ابری", desc: "دسترسی به منابع محاسباتی، پردازش و ذخیره‌سازی از طریق اینترنت به صورت اجاره‌ای." },
+            { id: 242, cat: 9, en: "Virtual Machine", pr: "ویرچوال ماشین", fa: "ماشین مجازی", desc: "شبیه‌سازی نرم‌افزاری کامپیوتر فیزیکی با سیستم‌عامل کامل و مستقل (VM)." },
+            { id: 243, cat: 9, en: "Container", pr: "کانتینر", fa: "کانتینر / ظرف محاسباتی", desc: "بسته‌بندی کدهای نرم‌افزار به همراه تمام پیش‌نیازهای آن برای اجرای روان روی هر سیستم." },
+            { id: 244, cat: 9, en: "Docker", pr: "داکر", fa: "داکر (Docker)", desc: "پلتفرمی فوق‌العاده محبوب برای ساخت، بسته‌بندی و اجرای کانتینرها." },
+            { id: 245, cat: 9, en: "Kubernetes", pr: "کوبرنتیز", fa: "کوبرنتیز (K8s)", desc: "ابزار خودکارسازی، ارکستریشن و مدیریت صدها کانتینر در سرورهای مقیاس بزرگ." },
+            { id: 246, cat: 9, en: "DevOps", pr: "دواپس", fa: "فرهنگ دواپس", desc: "فرهنگ، ابزارها و تلفیق تیم‌های توسعه نرم‌افزار (Dev) و عملیات زیرساخت (Ops)." },
+            { id: 247, cat: 9, en: "CI/CD", pr: "سی‌آی سی‌دی", fa: "ادغام و انتشار مداوم", desc: "مکانیزم خودکارسازی تست و استقرار کدهای جدید بدون دخالت دستی نیروها." },
+            { id: 248, cat: 9, en: "Microservices", pr: "میکروسرویسز", fa: "معماری ریزخدمات", desc: "معماری توزیع شده برای شکستن نرم‌افزار بزرگ به سرویس‌های کوچک و مجزا." },
+            { id: 249, cat: 9, en: "Serverless", pr: "سرورلس", fa: "بدون سرور", desc: "معماری اجرای کدها بدون درگیر شدن مستقیم برنامه نویس با مدیریت فیزیکی سرورها." },
+            { id: 250, cat: 9, en: "Scalability", pr: "اسکیلبلیتی", fa: "مقیاس‌پذیری", desc: "توانایی سیستم در پاسخ‌گویی به حجم بیشتر وظایف با ارتقای بهینه منابع." },
+            { id: 251, cat: 9, en: "Load Balancing", pr: "لود بالانسینگ", fa: "توازن بار ترافیکی", desc: "توزیع متعادل ترافیک کاربران بین سرورهای گوناگون برای جلوگیری از قطعی." },
+            { id: 252, cat: 9, en: "High Availability", pr: "های اویلبلیتی", fa: "پایداری بالا", desc: "طراحی سیستم برای داشتن کمترین زمان خوابیدگی و خطای قطعی." },
+            { id: 253, cat: 9, en: "Deployment", pr: "دپلویمنت", fa: "استقرار / دپلوی", desc: "انتقال نهایی برنامه آزمایش شده به سرورهای زنده برای استفاده کاربران عمومی." },
+            { id: 254, cat: 9, en: "GPU", pr: "جی‌پی‌یو", fa: "پردازنده گرافیکی (GPU)", desc: "پردازنده‌ای با قابلیت انجام محاسبات فوق‌موازی، مناسب یادگیری عمیق." },
+            { id: 255, cat: 9, en: "TPU", pr: "تی‌پی‌یو", fa: "واحد پردازش تنسور (TPU)", desc: "تراشه‌های اختصاصی توسعه‌یافته توسط گوگل برای محاسبات ماتریسی هوش مصنوعی." },
+            { id: 256, cat: 9, en: "CUDA", pr: "کودا", fa: "فناوری CUDA", desc: "پلتفرم برنامه‌نویسی انویدیا برای استفاده مستقیم از پردازش موازی کارت گرافیک." },
+            { id: 257, cat: 9, en: "Distributed Computing", pr: "دیستریبیوتد کامپیوتینگ", fa: "محاسبات توزیع‌شده", desc: "تقسیم وظایف محاسباتی سنگین بین چندین سیستم متصل به شبکه محلی یا اینترنت." },
+            { id: 258, cat: 9, en: "Latency", pr: "لیتنسی", fa: "تاخیر پاسخ‌دهی", desc: "مدت زمان مورد نیاز برای ارسال درخواست تا دریافت اولین پاسخ از سرور." },
+            { id: 259, cat: 9, en: "Throughput", pr: "تروپوت", fa: "نرخ پردازش (Throughput)", desc: "میزان کل کارهای انجام شده توسط سیستم در یک بازه زمانی مشخص." },
+            { id: 260, cat: 9, en: "Virtualization", pr: "ویرچوالایزیشن", fa: "مجازی‌سازی", desc: "ایجاد بسترهای مجازی از قطعات سخت‌افزاری فیزیکی سیستم." },
+
+            // Page 10
+            { id: 261, cat: 10, en: "Complexity", pr: "کامپلکسیتی", fa: "پیچیدگی الگوریتم", desc: "میزان زمان یا فضای رم مورد نیاز یک الگوریتم برای حل یک مسئله مشخص." },
+            { id: 262, cat: 10, en: "Big O Notation", pr: "بیگ او نوتیشن", fa: "نماد بیگ او (O)", desc: "نماد ریاضی برای توصیف بدترین حالت رفتار زمانی یا حافظه‌ای یک الگوریتم." },
+            { id: 263, cat: 10, en: "Time Complexity", pr: "تایم کامپلکسیتی", fa: "پیچیدگی زمانی", desc: "میزان تغییر تعداد گام‌های اجرای الگوریتم با بزرگ شدن ابعاد ورودی داده." },
+            { id: 264, cat: 10, en: "Space Complexity", pr: "اسپیس کامپلکسیتی", fa: "پیچیدگی فضایی", desc: "میزان تغییر ظرفیت حافظه مورد نیاز الگوریتم با رشد حجم ورودی داده." },
+            { id: 265, cat: 10, en: "Dynamic Programming", pr: "داینامیک پروگرمینگ", fa: "برنامه‌نویسی پویا", desc: "حل مسائل پیچیده با شکستن آن‌ها به زیرمسائل فرعی ساده غیرتکراری و ذخیره خروجی‌ها." },
+            { id: 266, cat: 10, en: "Greedy Algorithm", pr: "گریدی الگوریتم", fa: "الگوریتم حریصانه", desc: "انتخاب بهترین تصمیم موجود در هر لحظه بدون نگاه کردن به کل فضای بهینه‌سازی." },
+            { id: 267, cat: 10, en: "Graph", pr: "گراف", fa: "گراف / شبکه متصل", desc: "ساختار شبکه‌ای پویا متشکل از گره‌ها (Nodes) و یال‌های اتصال‌دهنده (Edges)." },
+            { id: 268, cat: 10, en: "Vector", pr: "بردار", fa: "بردار ریاضی", desc: "ماتریسی تک‌بعدی از اعداد؛ عنصر اساسی محاسبات ریاضی در شبکه‌های عصبی." },
+            { id: 269, cat: 10, en: "Linear Algebra", pr: "لینیر الجبرا", fa: "جبر خطی", desc: "شاخه‌ای از ریاضیات بر پایه محاسبات ماتریس و بردار، موتور ریاضی هوش مصنوعی." },
+            { id: 270, cat: 10, en: "Gradient", pr: "گرادیان", fa: "گرادیان / شیب", desc: "بردار نرخ تغییرات چندمتغیره تابع که جهت بیشترین افزایش را نشان می‌دهد." },
+            { id: 271, cat: 10, en: "Genetic Algorithm", pr: "جنتیک الگوریتم", fa: "الگوریتم ژنتیک", desc: "الگوریتم بهینه‌سازی تکاملی با مفاهیم جهش ژنتیکی و انتخاب طبیعی." },
+            { id: 272, cat: 10, en: "Heuristic", pr: "هوریستیک", fa: "ابتکاری / هوریستیک", desc: "راه‌های تخمینی سریع برای پیدا کردن پاسخ‌های نزدیک به بهینه در زمان کم." },
+            { id: 273, cat: 10, en: "Synthetic Data", pr: "سینتتیک دیتا", fa: "داده‌های مصنوعی", desc: "داده‌های شبیه‌سازی و ساخته شده توسط الگوریتم‌ها برای کارهای آموزشی و تحقیقاتی." },
+            { id: 274, cat: 10, en: "Vector Database", pr: "وکتور دیتابیس", fa: "پایگاه داده برداری", desc: "پایگاه داده ویژه‌ای برای ذخیره و کوئری‌نویسی فوق‌سریع در بردارهای امبدینگ هوش مصنوعی." },
+            { id: 275, cat: 10, en: "Semantic Search", pr: "سیمنتیک سرچ", fa: "جستجوی معنایی", desc: "درک نیت و مفهوم عبارات سرچ شده کاربر به جای انطباق کلمه‌به‌کلمه ساده لغات." },
+            { id: 276, cat: 10, en: "Zero-shot Learning", pr: "زیر شات لرنینگ", fa: "یادگیری بدون نمونه", desc: "توانایی مدل در پاسخ به کارهای جدید بدون داشتن دیتای آموزش در آن زمینه خاص." },
+            { id: 277, cat: 10, en: "Few-shot Learning", pr: "فیو شات لرنینگ", fa: "یادگیری با چند نمونه", desc: "توانایی یادگیری سریع یک وظیفه جدید با تکیه بر تعداد بسیار اندکی مثال تصویری یا متنی." },
+            { id: 278, cat: 10, en: "Hallucination", pr: "هالوسینیشن", fa: "توهم هوش مصنوعی", desc: "تولید اطلاعات کذب، بی‌ربط یا من‌درآوردی توسط مدل‌های زبانی با لحنی کاملاً مطمئن." },
+            { id: 279, cat: 10, en: "Agent", pr: "ایجنت", fa: "عامل هوشمند (Agent)", desc: "برنامه‌ای خودکار با قابلیت تصمیم‌گیری، تعامل با محیط و پیشبرد مستقل اهداف." },
+            { id: 280, cat: 10, en: "AI Safety", pr: "ای‌آی سیفتی", fa: "امنیت هوش مصنوعی", desc: "تلاش‌ها برای تضمین این موضوع که هوش مصنوعی مخرب نشده و به اهداف بشر آسیب نزند." },
+            { id: 281, cat: 10, en: "Explainable AI", pr: "اکسپلینبل ای‌آی", fa: "هوش مصنوعی توضیح‌پذیر", desc: "شفاف‌سازی و تفسیر رفتارهای تصمیم‌گیری مدل‌های جعبه‌سیاه یادگیری عمیق (XAI)." },
+            { id: 282, cat: 10, en: "Bias mitigation", pr: "بایاس میتیگیشن", fa: "کاهش سوگیری", desc: "فرآیند کاهش تبعیض‌های اجتماعی، جنسیتی یا نژادی موجود در مدل‌های هوش مصنوعی." },
+            { id: 283, cat: 10, en: "Quantization", pr: "کوانتیزیشن", fa: "کوانتیزه کردن مدل", desc: "فشرده‌سازی مدل‌ها با کاهش دقت اعشاری اعداد برای افزایش چشمگیر سرعت اجرا." },
+            { id: 284, cat: 10, en: "Pruning", pr: "پرونینگ", fa: "هرس کردن شبکه‌ها", desc: "حذف اتصالات یا وزن‌های بی‌اثر و کم‌اثر برای سبک‌سازی شبکه‌های عمیق." },
+            { id: 285, cat: 10, en: "Auto ML", pr: "اتو ام‌ال", fa: "یادگیری ماشین خودکار", desc: "خودکارسازی تمام بخش‌های فرآیند یادگیری ماشین از پاک‌سازی تا آموزش نهایی." },
+            { id: 286, cat: 10, en: "Edge AI", pr: "اج ای‌آی", fa: "هوش مصنوعی روی دستگاه", desc: "اجرای مستقیم فرآیندهای استنتاج مدل بر روی دیوایس محلی بدون اتصال به ابر." },
+            { id: 287, cat: 10, en: "Hyperparameter Tuning", pr: "هایپرپارامتر تیونینگ", fa: "بهینه‌سازی ابرپارامترها", desc: "استفاده از الگوریتم‌ها جهت یافتن ترکیب طلایی تنظیمات یک مدل یادگیری ماشین." },
+            { id: 288, cat: 10, en: "Multimodal", pr: "مالتی‌مودال", fa: "چندوجهی / مالتی‌مودال", desc: "مدل‌های هوش مصنوعی با توانایی تحلیل و درک همزمان داده‌های متنی، تصویر، صوت و ویدیو." },
+            { id: 289, cat: 10, en: "RLHF", pr: "آر‌ال‌اچ‌اف", fa: "یادگیری تقویتی با بازخورد انسان", desc: "بهینه‌سازی پاسخ‌های مدل هوش مصنوعی مولد متناسب با سلیقه و ارزش‌های انسان." },
+            { id: 290, cat: 10, en: "Alignment", pr: "الاینمنت", fa: "هم‌راستاسازی اهداف", desc: "تلاش برای هم‌راستا کردن نیت سیستم‌های هوشمند با اخلاقیات و خواسته‌های واقعی انسان." },
+            { id: 291, cat: 10, en: "Computer Science", pr: "کامپیوتر ساینس", fa: "علوم کامپیوتر", desc: "مطالعه همزمان اصول نظری، محاسباتی، سخت‌افزاری و نرم‌افزاری رایانه‌ها." },
+            { id: 292, cat: 10, en: "Matrix", pr: "ماتریس", fa: "ماتریس ریاضی", desc: "جدول سازمان‌یافته دوبعدی از اعداد برای تسهیل محاسبات جبر خطی." },
+            { id: 293, cat: 10, en: "Calculus", pr: "کلکولس", fa: "دیفرانسیل و انتگرال", desc: "ریاضیات نرخ تغییرات پیوسته، ابزار بهینه‌سازی توابع زیان در هوش مصنوعی." },
+            { id: 294, cat: 10, en: "Optimization", pr: "اپتیمایزیشن", fa: "بهینه‌سازی ریاضی", desc: "یافتن بهینه‌ترین، سریع‌ترین و کم‌هزینه‌ترین حالت تصمیم‌گیری در فرمول‌ها." },
+            { id: 295, cat: 10, en: "Data Wrangling", pr: "دیتا رانگلینگ", fa: "پاک‌سازی و فرمت‌دهی داده", desc: "آماده‌سازی عمیق داده‌های خام متغیر جهت تغذیه ایمن به مدل‌های ماشین." },
+            { id: 296, cat: 10, en: "Normalization", pr: "نورمالایزیشن", fa: "نرمال‌سازی مقادیر", desc: "محدود کردن دامنه مقادیر عددی ورودی مدل بین بازه استاندارد مانند ۰ و ۱." },
+            { id: 297, cat: 10, en: "Standardization", pr: "استانداردایزیشن", fa: "استانداردسازی مقادیر", desc: "تبدیل توزیع داده‌ها به توزیعی با انحراف معیار ۱ و میانگین صفر جهت ثبات آموزش." },
+            { id: 298, cat: 10, en: "Tokenizer", pr: "توکنایزر", fa: "توکنایزر", desc: "نرم‌افزار یا تابعی که وظیفه خرد کردن کلمات و نگاشت آن‌ها به آی‌دی عددی را بر عهده دارد." },
+            { id: 299, cat: 10, en: "Context Window", pr: "کانتکست ویندو", fa: "محدوده بافتار", desc: "ظرفیت نهایی پردازش پرامپت‌ها در مدل‌های زبانی بزرگ قبل از پر شدن حافظه." },
+            { id: 300, cat: 10, en: "Deep Learning Model", pr: "دیپ لرنینگ مدل", fa: "مدل یادگیری عمیق نهایی", desc: "سازه شبکه‌ای عصبی لایه‌لایه آموزش‌دیده و مستقل جهت تخمین پاسخ برای مسائل پیشرفته." }
+        ];
+
+        // Active state variables
+        let currentTab = 'explorer';
+        let filteredWordsList = [...glossaryData];
+        let currentFcIndex = 0;
+        let isFlipped = false;
+
+        // Quiz State
+        let quizQuestions = [];
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+
+        // On document load
+        window.addEventListener('DOMContentLoaded', () => {
+            renderExplorerCards();
+            updateResultsCount();
+            initFlashcards();
+        });
+
+        // Tab Switching Logic
+        function switchTab(tabId) {
+            currentTab = tabId;
+            const tabs = ['explorer', 'flashcards', 'quiz'];
+            
+            tabs.forEach(t => {
+                const btn = document.getElementById(`tab-${t}`);
+                const sec = document.getElementById(`sec-${t}`);
+                
+                if (t === tabId) {
+                    btn.classList.add('bg-indigo-600', 'text-white');
+                    btn.classList.remove('text-slate-400', 'hover:text-slate-200');
+                    sec.classList.remove('hidden');
+                } else {
+                    btn.classList.remove('bg-indigo-600', 'text-white');
+                    btn.classList.add('text-slate-400', 'hover:text-slate-200');
+                    sec.classList.add('hidden');
+                }
+            });
+
+            if(tabId === 'flashcards') {
+                resetFlashcardView();
+            }
+        }
+
+        // --- EXPLORER LOGIC ---
+        function renderExplorerCards() {
+            const grid = document.getElementById('words-grid');
+            grid.innerHTML = '';
+
+            if (filteredWordsList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12 bg-slate-800/40 rounded-2xl border border-slate-700/40">
+                        <i class="fa-solid fa-folder-open text-4xl text-slate-500 mb-2"></i>
+                        <p class="text-slate-400 font-bold">هیچ واژه‌ای مطابق با فیلتر شما یافت نشد.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            filteredWordsList.forEach(w => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-800 p-5 rounded-xl border border-slate-700/60 hover:border-indigo-500/50 transition duration-300 shadow-md flex flex-col justify-between group cursor-pointer";
+                card.onclick = () => toggleCardDetails(w.id);
+                
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-start gap-2">
+                            <h3 class="text-lg font-black text-white group-hover:text-indigo-400 transition-colors">${w.en}</h3>
+                            <span class="text-[10px] bg-slate-900 text-slate-400 px-2.5 py-1 rounded-md font-bold shrink-0">کد ${w.id}</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-indigo-300 font-medium bg-indigo-500/10 px-2 py-0.5 rounded-md">تلفظ: ${w.pr}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-100 pt-1 border-t border-slate-700/40">${w.fa}</h4>
+                        <p id="desc-${w.id}" class="hidden text-xs text-slate-400 leading-relaxed bg-slate-900/50 p-3 rounded-lg mt-2 border border-slate-800">
+                            ${w.desc}
+                        </p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function toggleCardDetails(id) {
+            const desc = document.getElementById(`desc-${id}`);
+            if (desc) {
+                desc.classList.toggle('hidden');
+            }
+        }
+
+        function filterWords() {
+            const searchVal = document.getElementById('search-input').value.toLowerCase().trim();
+            const catVal = document.getElementById('category-filter').value;
+
+            filteredWordsList = glossaryData.filter(w => {
+                const matchSearch = w.en.toLowerCase().includes(searchVal) || 
+                                    w.pr.includes(searchVal) || 
+                                    w.fa.includes(searchVal) ||
+                                    w.desc.includes(searchVal);
+                
+                const matchCat = catVal === 'all' || w.cat.toString() === catVal;
+
+                return matchSearch && matchCat;
+            });
+
+            renderExplorerCards();
+            updateResultsCount();
+        }
+
+        function updateResultsCount() {
+            const countSpan = document.getElementById('results-count');
+            countSpan.textContent = `یافت شده: ${filteredWordsList.length} از ۳۰۰ واژه`;
+        }
+
+
+        // --- FLASHCARDS LOGIC ---
+        function initFlashcards() {
+            updateFlashcardData();
+        }
+
+        function flipFlashcard() {
+            const inner = document.getElementById('flashcard-inner');
+            isFlipped = !isFlipped;
+            if (isFlipped) {
+                inner.classList.add('rotate-y-180');
+            } else {
+                inner.classList.remove('rotate-y-180');
+            }
+        }
+
+        function resetFlashcardView() {
+            isFlipped = false;
+            document.getElementById('flashcard-inner').classList.remove('rotate-y-180');
+        }
+
+        function updateFlashcardData() {
+            const item = glossaryData[currentFcIndex];
+            document.getElementById('fc-category').textContent = getCategoryName(item.cat);
+            document.getElementById('fc-index').textContent = `${item.id} / 300`;
+            document.getElementById('fc-word').textContent = item.en;
+            document.getElementById('fc-pronounce').textContent = item.pr;
+            document.getElementById('fc-meaning').textContent = `${item.fa}: ${item.desc}`;
+        }
+
+        function nextFlashcard() {
+            resetFlashcardView();
+            setTimeout(() => {
+                currentFcIndex = (currentFcIndex + 1) % glossaryData.length;
+                updateFlashcardData();
+            }, 150);
+        }
+
+        function prevFlashcard() {
+            resetFlashcardView();
+            setTimeout(() => {
+                currentFcIndex = (currentFcIndex - 1 + glossaryData.length) % glossaryData.length;
+                updateFlashcardData();
+            }, 150);
+        }
+
+        function randomFlashcard() {
+            resetFlashcardView();
+            setTimeout(() => {
+                currentFcIndex = Math.floor(Math.random() * glossaryData.length);
+                updateFlashcardData();
+            }, 150);
+        }
+
+        function getCategoryName(catId) {
+            const categories = {
+                1: "یادگیری ماشین",
+                2: "یادگیری عمیق",
+                3: "پردازش زبان طبیعی",
+                4: "بینایی ماشین",
+                5: "علم داده و آمار",
+                6: "مفاهیم برنامه‌نویسی",
+                7: "مهندسی نرم‌افزار",
+                8: "وب و امنیت دیتابیس",
+                9: "کلاود و دواپس",
+                10: "ریاضیات و الگوریتم"
+            };
+            return categories[catId] || "عمومی";
+        }
+
+
+        // --- QUIZ LOGIC ---
+        function startQuiz() {
+            // Hide start screen, show active screen
+            document.getElementById('quiz-start-screen').classList.add('hidden');
+            document.getElementById('quiz-result-screen').classList.add('hidden');
+            document.getElementById('quiz-active-screen').classList.remove('hidden');
+
+            // Reset scores
+            quizScore = 0;
+            currentQuizIndex = 0;
+            
+            // Build 5 questions randomly
+            quizQuestions = [];
+            let shuffled = [...glossaryData].sort(() => 0.5 - Math.random());
+            
+            for(let i=0; i<5; i++) {
+                let targetWord = shuffled[i];
+                // Get 3 incorrect options from others
+                let wrongOptions = glossaryData
+                    .filter(w => w.id !== targetWord.id)
+                    .sort(() => 0.5 - Math.random())
+                    .slice(0, 3)
+                    .map(w => w.fa);
+
+                let options = [targetWord.fa, ...wrongOptions].sort(() => 0.5 - Math.random());
+
+                quizQuestions.push({
+                    word: targetWord.en,
+                    correct: targetWord.fa,
+                    options: options
+                });
+            }
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            // Hide feedback and next button
+            const fb = document.getElementById('quiz-feedback');
+            fb.classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+
+            const q = quizQuestions[currentQuizIndex];
+            
+            document.getElementById('quiz-progress').textContent = `سوال ${currentQuizIndex + 1} از ۵`;
+            document.getElementById('quiz-score').textContent = `امتیاز: ${quizScore}`;
+            document.getElementById('quiz-question-word').textContent = q.word;
+
+            const optionsDiv = document.getElementById('quiz-options');
+            optionsDiv.innerHTML = '';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = "w-full bg-slate-900 border border-slate-700 hover:border-indigo-500 py-3 px-4 rounded-xl text-right font-bold text-sm transition duration-150 flex justify-between items-center";
+                btn.onclick = () => submitQuizAnswer(btn, opt, q.correct);
+                btn.innerHTML = `
+                    <span>${opt}</span>
+                    <i class="fa-regular fa-circle text-slate-600"></i>
+                `;
+                optionsDiv.appendChild(btn);
+            });
+        }
+
+        function submitQuizAnswer(selectedBtn, chosenOpt, correctOpt) {
+            // Disable all buttons in quiz option to prevent double-clicks
+            const buttons = document.getElementById('quiz-options').querySelectorAll('button');
+            buttons.forEach(b => b.disabled = true);
+
+            const fb = document.getElementById('quiz-feedback');
+            fb.classList.remove('hidden');
+
+            if (chosenOpt === correctOpt) {
+                quizScore++;
+                selectedBtn.className = "w-full bg-emerald-950 border-2 border-emerald-500 text-emerald-100 py-3 px-4 rounded-xl text-right font-bold text-sm flex justify-between items-center";
+                selectedBtn.querySelector('i').className = "fa-solid fa-circle-check text-emerald-500";
+                
+                fb.className = "p-3.5 rounded-xl text-center font-bold text-sm bg-emerald-500/20 text-emerald-300";
+                fb.textContent = "✓ آفرین! پاسخ شما درست بود.";
+            } else {
+                selectedBtn.className = "w-full bg-rose-950 border-2 border-rose-500 text-rose-100 py-3 px-4 rounded-xl text-right font-bold text-sm flex justify-between items-center";
+                selectedBtn.querySelector('i').className = "fa-solid fa-circle-xmark text-rose-500";
+                
+                // Highlight correct button
+                buttons.forEach(b => {
+                    if (b.innerText.trim() === correctOpt) {
+                        b.className = "w-full bg-emerald-950 border-2 border-emerald-500/50 text-emerald-100 py-3 px-4 rounded-xl text-right font-bold text-sm flex justify-between items-center";
+                    }
+                });
+
+                fb.className = "p-3.5 rounded-xl text-center font-bold text-sm bg-rose-500/20 text-rose-300";
+                fb.textContent = `❌ اشتباه بود! پاسخ درست: ${correctOpt}`;
+            }
+
+            document.getElementById('quiz-score').textContent = `امتیاز: ${quizScore}`;
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuizQuestion() {
+            currentQuizIndex++;
+            if (currentQuizIndex < 5) {
+                renderQuizQuestion();
+            } else {
+                showQuizResult();
+            }
+        }
+
+        function showQuizResult() {
+            document.getElementById('quiz-active-screen').classList.add('hidden');
+            const resultScreen = document.getElementById('quiz-result-screen');
+            resultScreen.classList.remove('hidden');
+
+            const resultText = document.getElementById('quiz-result-text');
+            const resultIcon = document.getElementById('quiz-result-icon');
+
+            if(quizScore === 5) {
+                resultIcon.textContent = "🏆";
+                resultText.textContent = "فوق‌العاده بود! امتیاز شما ۵ از ۵ است. شما یک متخصص واقعی هستید!";
+            } else if (quizScore >= 3) {
+                resultIcon.textContent = "🥈";
+                resultText.textContent = `آفرین! امتیاز شما ${quizScore} از ۵ است. عملکرد خوبی داشتید.`;
+            } else {
+                resultIcon.textContent = "📚";
+                resultText.textContent = `امتیاز شما ${quizScore} از ۵ شد. پیشنهاد می‌کنم کارت‌های یادگیری را دوباره دوره کنید.`;
+            }
+        }
+    </script>
+</body>
+</html>
