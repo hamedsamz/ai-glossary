@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>واژه‌نامه تخصصی ۵۰۰ واژه‌ای هوش مصنوعی و برنامه‌نویسی - حامد سمیع زاده</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Vazirmatn -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@100..900&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -54,25 +57,59 @@
                 </div>
             </div>
             
-            <a href="https://instagram.com/hamedsamizadeh" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 hover:scale-105 text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-xl transition-all duration-300">
-                <i class="fa-brands fa-instagram text-lg"></i>
-                <span>hamedsamizadeh</span>
-            </a>
+            <div class="flex items-center gap-3 flex-wrap">
+                <!-- User Profile & Authentication Widget -->
+                <div id="auth-widget" class="flex items-center bg-slate-950/80 border border-slate-800 rounded-full py-1.5 px-3.5 gap-2.5 transition-all">
+                    <!-- Loading State -->
+                    <div id="auth-loading" class="flex items-center gap-2 text-xs text-slate-400">
+                        <i class="fa-solid fa-circle-notch animate-spin text-blue-400"></i>
+                        <span>بررسی حساب...</span>
+                    </div>
+                    <!-- Logged Out State -->
+                    <button id="btn-show-login" onclick="openAuthModal()" class="hidden text-xs font-bold text-blue-400 hover:text-blue-300 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-user-plus text-sm"></i>
+                        <span>ورود / ثبت‌نام اعضا</span>
+                    </button>
+                    <!-- Logged In State -->
+                    <div id="auth-logged-in" class="hidden flex items-center gap-2.5">
+                        <div class="flex flex-col items-end">
+                            <span id="user-display-email" class="text-xs font-bold text-slate-200 truncate max-w-[120px] sm:max-w-[160px]">کاربر هوشمند</span>
+                            <span class="text-[9px] text-emerald-400 flex items-center gap-1">
+                                <span class="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping"></span>
+                                حساب فعال ابری
+                            </span>
+                        </div>
+                        <button onclick="handleLogout()" class="p-1.5 rounded-full hover:bg-rose-500/10 text-rose-400 transition-all" title="خروج از حساب">
+                            <i class="fa-solid fa-power-off text-sm"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <a href="https://instagram.com/hamedsamizadeh" target="_blank" class="flex items-center gap-2 bg-gradient-to-r from-pink-600 via-purple-600 to-blue-600 hover:scale-105 text-white px-5 py-2.5 rounded-full text-xs sm:text-sm font-bold shadow-xl transition-all duration-300">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                    <span>hamedsamizadeh</span>
+                </a>
+            </div>
         </div>
     </header>
 
     <div class="max-w-6xl mx-auto w-full px-4 mt-6">
-        <div class="grid grid-cols-3 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80 shadow-inner">
-            <button onclick="switchTab('explorer')" id="tab-explorer" class="py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-2 bg-blue-600 text-white shadow-md">
-                <i class="fa-solid fa-magnifying-glass text-base"></i>
+        <div class="grid grid-cols-4 bg-slate-900/80 p-1.5 rounded-2xl border border-slate-800/80 shadow-inner">
+            <button onclick="switchTab('explorer')" id="tab-explorer" class="py-3 px-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-blue-600 text-white shadow-md">
+                <i class="fa-solid fa-magnifying-glass text-sm"></i>
                 <span>جستجو و مرور</span>
             </button>
-            <button onclick="switchTab('flashcards')" id="tab-flashcards" class="py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-slate-400 hover:text-slate-200 flex flex-col sm:flex-row items-center justify-center gap-2">
-                <i class="fa-solid fa-clone text-base"></i>
-                <span>فلش‌کارت تعاملی</span>
+            <button onclick="switchTab('favorites')" id="tab-favorites" class="py-3 px-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-slate-400 hover:text-slate-200 flex flex-col sm:flex-row items-center justify-center gap-1.5 relative">
+                <i class="fa-solid fa-star text-sm"></i>
+                <span>نشان‌شده‌ها</span>
+                <span id="fav-badge" class="absolute -top-1 -left-1 sm:top-1 sm:left-2 bg-rose-500 text-[10px] text-white px-1.5 rounded-full font-black hidden">0</span>
             </button>
-            <button onclick="switchTab('quiz')" id="tab-quiz" class="py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-slate-400 hover:text-slate-200 flex flex-col sm:flex-row items-center justify-center gap-2">
-                <i class="fa-solid fa-graduation-cap text-base"></i>
+            <button onclick="switchTab('flashcards')" id="tab-flashcards" class="py-3 px-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-slate-400 hover:text-slate-200 flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                <i class="fa-solid fa-clone text-sm"></i>
+                <span>فلش‌کارت</span>
+            </button>
+            <button onclick="switchTab('quiz')" id="tab-quiz" class="py-3 px-1.5 rounded-xl text-xs sm:text-sm font-bold transition-all duration-300 text-slate-400 hover:text-slate-200 flex flex-col sm:flex-row items-center justify-center gap-1.5">
+                <i class="fa-solid fa-graduation-cap text-sm"></i>
                 <span>آزمون سنجش</span>
             </button>
         </div>
@@ -112,12 +149,39 @@
             <!-- Stats Counter -->
             <div class="flex justify-between items-center px-2">
                 <span id="results-count" class="text-xs sm:text-sm text-slate-400 font-bold">در حال بارگذاری کلمات...</span>
-                <span class="text-[10px] sm:text-xs text-blue-400 font-bold bg-blue-500/10 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-info mr-1"></i> برای مشاهده تعریف کامل روی کارت‌ها ضربه بزنید</span>
+                <span class="text-[10px] sm:text-xs text-blue-400 font-bold bg-blue-500/10 px-3 py-1 rounded-full"><i class="fa-solid fa-circle-info mr-1"></i> برای نشاندار کردن کلمات و ذخیره دائم، ابتدا وارد حساب کاربری خود شوید</span>
             </div>
 
             <!-- Words Grid -->
             <div id="words-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+        <!-- SECTION 1B: FAVORITES TAB -->
+        <section id="sec-favorites" class="hidden space-y-6">
+            <div class="text-center max-w-lg mx-auto py-3">
+                <h2 class="text-xl font-black text-white mb-1"><i class="fa-solid fa-star text-rose-500 mr-1.5"></i> کلمات نشان‌شده شما</h2>
+                <p id="fav-status-tip" class="text-xs text-slate-400">کلماتی که علامت ستاره آن‌ها را روشن کرده‌اید در این بخش به صورت زنده نمایش داده می‌شوند.</p>
+            </div>
+
+            <!-- Logged Out Warning in Favorites -->
+            <div id="fav-guest-alert" class="bg-slate-900/80 p-8 rounded-3xl border border-dashed border-slate-800 text-center space-y-4 max-w-md mx-auto shadow-xl">
+                <div class="text-amber-500 text-4xl">
+                    <i class="fa-solid fa-user-lock"></i>
+                </div>
+                <div class="space-y-1.5">
+                    <h3 class="text-base font-bold text-white">نیاز به ثبت‌نام یا ورود به حساب</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">برای ذخیره‌سازی، ویرایش و دسترسی مداوم به کلمات نشان‌شده خود در تمامی پلتفرم‌ها، لطفاً به صورت رایگان یک حساب کاربری بسازید.</p>
+                </div>
+                <button onclick="openAuthModal()" class="bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold py-2.5 px-6 rounded-xl transition shadow-lg shadow-blue-600/20">
+                    ورود / ثبت نام رایگان
+                </button>
+            </div>
+
+            <!-- Favorites Grid -->
+            <div id="fav-words-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamic Content -->
             </div>
         </section>
 
@@ -240,6 +304,63 @@
         </section>
     </main>
 
+    <!-- SIGN IN / SIGN UP AUTH MODAL -->
+    <div id="auth-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 z-50 hidden transition-all duration-300">
+        <div class="bg-gradient-to-b from-slate-900 to-slate-950 border border-slate-800/80 max-w-md w-full rounded-3xl p-6 sm:p-8 space-y-6 shadow-2xl relative transform scale-95 transition-all duration-300">
+            <!-- Close Button -->
+            <button onclick="closeAuthModal()" class="absolute top-4 left-4 p-2 rounded-xl text-slate-500 hover:text-slate-100 hover:bg-slate-800/60 transition-all">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <!-- Modal Header / Tabs -->
+            <div class="text-center space-y-1.5">
+                <h3 id="auth-title" class="text-xl font-black text-white">ورود به حساب کاربری</h3>
+                <p class="text-xs text-slate-400">برای ذخیره و همگام‌سازی ابری کلمات با ایمیل خود وارد شوید</p>
+            </div>
+
+            <!-- Tab Selectors -->
+            <div class="flex bg-slate-950/80 p-1 rounded-xl border border-slate-850">
+                <button onclick="switchAuthMode('login')" id="auth-tab-login" class="flex-1 py-2 rounded-lg text-xs font-black bg-blue-600 text-white transition-all">ورود</button>
+                <button onclick="switchAuthMode('signup')" id="auth-tab-signup" class="flex-1 py-2 rounded-lg text-xs font-black text-slate-400 hover:text-slate-200 transition-all">عضویت جدید</button>
+            </div>
+
+            <!-- Auth Form -->
+            <form id="auth-form" onsubmit="handleAuthSubmit(event)" class="space-y-4">
+                <div class="space-y-1.5">
+                    <label class="block text-[11px] font-black text-blue-400 mr-1">آدرس ایمیل:</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500">
+                            <i class="fa-regular fa-envelope"></i>
+                        </span>
+                        <input type="email" id="auth-email" required placeholder="example@mail.com" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pr-10 pl-4 text-sm text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    </div>
+                </div>
+
+                <div class="space-y-1.5">
+                    <label class="block text-[11px] font-black text-blue-400 mr-1">رمز عبور:</label>
+                    <div class="relative">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 text-slate-500">
+                            <i class="fa-solid fa-lock"></i>
+                        </span>
+                        <input type="password" id="auth-password" required placeholder="••••••••" class="w-full bg-slate-950 border border-slate-800 rounded-xl py-3 pr-10 pl-4 text-sm text-slate-100 focus:outline-none focus:ring-1 focus:ring-blue-500 transition-all">
+                    </div>
+                </div>
+
+                <button type="submit" id="auth-submit-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3.5 rounded-xl transition-all shadow-lg shadow-blue-600/20 text-xs sm:text-sm">
+                    ورود به حساب کاربری
+                </button>
+            </form>
+
+            <div id="auth-error" class="hidden p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-center text-xs font-bold text-rose-400">
+                پیام خطا
+            </div>
+
+            <div class="text-center text-[10px] text-slate-500 border-t border-slate-900 pt-4">
+                توسعه‌یافته بر روی بستر امن ابری هوشمند حامد سمیع زاده
+            </div>
+        </div>
+    </div>
+
     <!-- Footer -->
     <footer class="bg-slate-950 border-t border-slate-900/60 py-6 text-center text-slate-500 text-xs sm:text-sm mt-auto">
         <div class="max-w-6xl mx-auto px-4 space-y-3">
@@ -254,9 +375,7 @@
         <span id="toast-message" class="text-xs sm:text-sm font-bold">پیام سیستم</span>
     </div>
 
-    <!-- GLOSSARY DATA & SCRIPTS -->
     <script>
-        // Generating the complete and comprehensive 500 words database
         const glossaryData = [
             // ================== CATEGORY 1: مفاهیم پایه هوش مصنوعی و یادگیری ماشین (1-50) ==================
             { id: 1, cat: 1, en: "Artificial Intelligence", pr: "آرتیفیشال اینتلیجنس", fa: "هوش مصنوعی", desc: "شبیه‌سازی فرآیندهای هوش انسانی توسط سیستم‌های کامپیوتری." },
@@ -312,7 +431,7 @@
 
             // ================== CATEGORY 2: یادگیری عمیق و شبکه‌های عصبی (51-100) ==================
             { id: 51, cat: 2, en: "Deep Learning", pr: "دیپ لرنینگ", fa: "یادگیری عمیق", desc: "زیرمجموعه‌ای از ماشین لرنینگ بر پایه مدل‌های شبکه‌ عصبی با لایه‌های عمیق." },
-            { id: 52, cat: 2, en: "Neural Network", pr: "نورال نتورک", fa: "شبکه عصبی مصنوعی", desc: "مدل‌های محاسباتی الهام گرفته شده از نورون‌های سیستم عصبی زیستی انسان." },
+            { id: 52, cat: 2, en: "Neural Network", pr: "نورال netورک", fa: "شبکه عصبی مصنوعی", desc: "مدل‌های محاسباتی الهام گرفته شده از نورون‌های سیستم عصبی زیستی انسان." },
             { id: 53, cat: 2, en: "Artificial Neural Network", pr: "آرتیفیشال نورال نتورک", fa: "شبکه عصبی مصنوعی (ANN)", desc: "ساختار پایه‌ای شبکه‌های عصبی حاوی لایه‌های ورودی، پنهان و خروجی." },
             { id: 54, cat: 2, en: "Convolutional Neural Network", pr: "کانولوشنال نورال نتورک", fa: "شبکه عصبی کانولوشنی (CNN)", desc: "شبکه‌ای توسعه‌یافته برای تشخیص ویژگی‌های تصاویر و ویدیوها." },
             { id: 55, cat: 2, en: "Recurrent Neural Network", pr: "ریکارنت نورال نتورک", fa: "شبکه عصبی برگشتی (RNN)", desc: "شبکه‌های عصبی مناسب برای کارهای سری زمانی و دنباله‌ای مانند متون." },
@@ -329,39 +448,38 @@
             { id: 66, cat: 2, en: "Bias (neuron)", pr: "بایاس نورون", fa: "بایاس / اریب نورون", desc: "عدد ثابت اضافه شونده به مجموع حاصلضرب ورودی‌ها جهت تنظیم آستانه تحریک." },
             { id: 67, cat: 2, en: "Hidden Layer", pr: "هیدن لیر", fa: "لایه پنهان", desc: "لایه‌های محاسباتی میانی در شبکه عصبی که ویژگی‌ها را استخراج می‌کنند." },
             { id: 68, cat: 2, en: "Neuron", pr: "نورون", fa: "نورون / گره محاسباتی", desc: "کوچک‌ترین جزء پردازشی ریاضی در شبکه عصبی مصنوعی." },
-            { id: 501, cat: 2, en: "Synapse", pr: "سیناپس", fa: "سیناپس / اتصال", desc: "کانال اتصال و ارسال سیگنال محاسباتی میان دو نورون شبکه." },
-            { id: 69, cat: 2, en: "Pooling", pr: "پولینگ", fa: "کاهش ابعاد (پولینگ)", desc: "فرآیند استخراج مشخصه‌های کلی تصویر و کوچک‌تر کردن اندازه ابعاد ماتریس‌ها." },
-            { id: 70, cat: 2, en: "Dropout", pr: "دراپ‌اوت", fa: "حذف تصادفی نورون‌ها", desc: "خاموش کردن موقت نورون‌ها برای جلوگیری از بروز پدیده بیش‌برازش." },
-            { id: 71, cat: 2, en: "Fine-tuning", pr: "فاین تیونینگ", fa: "تنظیم دقیق", desc: "آموزش جزئی و ثانویه یک مدل پایه از پیش‌ساخته روی دیتاست جدید و کوچک‌تر." },
-            { id: 72, cat: 2, en: "Transfer Learning", pr: "ترنسفر لرنینگ", fa: "یادگیری انتقالی", desc: "به‌کارگیری دانش ذخیره‌شده یک مدل قدیمی برای تسریع در یادگیری کاری نو." },
-            { id: 73, cat: 2, en: "Embedding", pr: "امبدینگ", fa: "امبدینگ / جاسازی عددی", desc: "نگاشت برداری داده‌های متنی یا اشیاء به فضا با ابعاد بهینه ریاضی." },
-            { id: 74, cat: 2, en: "Latent Space", pr: "لیتنت اسپیس", fa: "فضای پنهان", desc: "فضای برداری فشرده حاوی ویژگی‌های مفهومی و اصلی داده‌های ورودی." },
-            { id: 75, cat: 2, en: "Attention Mechanism", pr: "اتنشن مکانیزم", fa: "مکانیزم توجه", desc: "تکنیک متمرکزسازی نگاه مدل بر بخش‌های اصلی و با اهمیت ورودی." },
-            { id: 76, cat: 2, en: "Self-Attention", pr: "سلف اتنشن", fa: "خود‌توجهی", desc: "سنجش همبستگی کلمات یک جمله نسبت به کلمات مجاور همان جمله." },
-            { id: 77, cat: 2, en: "Feedforward", pr: "فیدفوروارْد", fa: "پیش‌رو / فیدفوروارْد", desc: "جریان حرکت مستقیم داده‌ها از لایه ورودی به خروجی بدون بازگشت لوپ." },
-            { id: 78, cat: 2, en: "Parameter", pr: "پارامتر", fa: "پارامترهای قابل آموزش", desc: "متغیرهایی نظیر وزن‌ها و بایاس‌ها که الگوریتم در زمان آموزش تنظیم می‌کند." },
-            { id: 79, cat: 2, en: "Weights Initialization", pr: "ویتس اینیشیالایزیشن", fa: "مقداردهی اولیه وزن‌ها", desc: "تعیین مقادیر آغازین وزن‌های شبکه عصبی برای پایداری در بهینه‌سازی گرادیان." },
-            { id: 80, cat: 2, en: "Perceptron", pr: "پرسپترون", fa: "پرسپترون", desc: "قدیمی‌ترین و پایه‌ای‌ترین شکل شبکه عصبی تک‌لایه خطی." },
-            { id: 81, cat: 2, en: "Multi-Layer Perceptron", pr: "مولتی لیر پرسپترون", fa: "پرسپترون چندلایه (MLP)", desc: "شبکه‌ای عصبی شامل چندین لایه متصل به هم مجهز به توابع غیرخطی." },
-            { id: 82, cat: 2, en: "Vanishing Gradient", pr: "ونیشینگ گرادیان", fa: "محو شدگی گرادیان", desc: "مشکل جدی کاهش نزدیک به صفر مشتق خطا در لایه‌های ابتدایی شبکه‌های عمیق." },
-            { id: 83, cat: 2, en: "Exploding Gradient", pr: "اکسپلودینگ گرادیان", fa: "انفجار گرادیان", desc: "افزایش بسیار بزرگ و ناگهانی مقدار مشتق‌های خطا در طول فرآیند آموزش." },
-            { id: 84, cat: 2, en: "Batch Normalization", pr: "بچ نرمالایزیشن", fa: "نرمال‌سازی دسته‌ای", desc: "تکنیکی برای نرمال کردن ورودی‌های هر لایه در طول آموزش جهت ثبات بیشتر." },
-            { id: 85, cat: 2, en: "Optimizers", pr: "اپتیمایزرز", fa: "بهینه‌سازها", desc: "الگوریتم‌هایی نظیر Adam یا SGD برای آپدیت دقیق‌تر پارامترها." },
-            { id: 86, cat: 2, en: "Adam Optimizer", pr: "آدام اپتیمایزر", fa: "بهینه‌ساز آدام", desc: "الگوریتم بهینه‌سازی تطبیقی با ترکیب ویژگی‌های گشتاور و سرعت نزول." },
-            { id: 87, cat: 2, en: "Recurrent Unit", pr: "ریکارنت یونیت", fa: "واحد برگشتی", desc: "جزء محاسباتی پایه‌ای در شبکه‌های RNN با نگه‌داری اطلاعات حالت قبلی." },
-            { id: 88, cat: 2, en: "Gated Recurrent Unit", pr: "گیتد ریکارنت یونیت", fa: "واحد برگشتی دروازه‌دار (GRU)", desc: "مدل ساده‌شده ال‌اس‌تی‌ام با دو دروازه بروزرسانی و بازنشانی." },
-            { id: 89, cat: 2, en: "Radial Basis Function", pr: "ردیال بیسیس فانکشن", fa: "شبکه تابع پایه شعاعی (RBF)", desc: "نوعی شبکه عصبی که از توابع ریاضی فاصله محور به عنوان فعال‌سازی بهره می‌برد." },
-            { id: 90, cat: 2, en: "Hopfield Network", pr: "هاپفیلد نتورک", fa: "شبکه هاپفیلد", desc: "نوعی حافظه تداعی‌گر و خودبرگشت متقارن در معماری‌های اولیه عصبی." },
-            { id: 91, cat: 2, en: "Kohonen Map", pr: "کوهونن مپ", fa: "نقشه خودسازمان‌ده کوهونن (SOM)", desc: "مدل خوشه‌بندی شبکه عصبی بدون نیاز به نظارت برای کاهش بعد داده‌ها." },
-            { id: 92, cat: 2, en: "Deep Belief Network", pr: "دیپ بلیو نتورک", fa: "شبکه باور عمیق", desc: "شبکه‌ای عمیق متشکل از ماشین‌های بولتزمن محدود شده روی هم." },
-            { id: 93, cat: 2, en: "Restricted Boltzmann Machine", pr: "رستریکتد بولتزمن ماشین", fa: "ماشین بولتزمن محدود شده (RBM)", desc: "یک شبکه عصبی مولد احتمالی دو لایه متقارن." },
-            { id: 94, cat: 2, en: "LeakyReLU", pr: "لیکی ری‌لو", fa: "تابع ری‌لو نشت‌دار", desc: "بهبود تابع ری‌لو با عبور ناچیز مقادیر منفی برای ممانعت از مرگ نورون‌ها." },
-            { id: 95, cat: 2, en: "ELU", pr: "ای‌ال‌یو", fa: "تابع فعال‌سازی واحد خطی نمایی", desc: "نوعی تابع فعال‌سازی غیرخطی هموار برای سرعت بخشیدن به آموزش مدل." },
-            { id: 96, cat: 2, en: "Forward Propagation", pr: "فوروارْد پراپگیشن", fa: "انتشار رو به جلو", desc: "محاسبه گام‌به‌گام و لایه‌ای خروجی شبکه با ورودی‌های مشخص." },
-            { id: 97, cat: 2, en: "Loss Landscape", pr: "لاس لنداسکیپ", fa: "چشم‌انداز خطای مدل", desc: "منحنی چندبعدی پستی و بلندی‌های خطا بر حسب تمام وزن‌های قابل تنظیم شبکه." },
-            { id: 98, cat: 2, en: "Saddle Point", pr: "سدل پوینت", fa: "نقطه زینی", desc: "نقطه‌ای در فضای خطا که شیب آن صفر است اما نقطه مینیمم کلی یا محلی نیست." },
-            { id: 99, cat: 2, en: "Local Minima", pr: "لوکال مینیما", fa: "مینیمم محلی", desc: "نقطه‌ای در فضای خطا با کمترین مقدار نسبت به نقاط مجاور خود." },
-            { id: 100, cat: 2, en: "Global Minima", pr: "گلوبال مینیما", fa: "مینیمم مطلق / سراسری", desc: "بهترین و پایینی‌ترین بخش در فضای خطا که هدف غایی الگوریتم بهینه‌ساز است." },
+            { id: 69, cat: 2, en: "Synapse", pr: "سیناپس", fa: "سیناپس / اتصال", desc: "کانال اتصال و ارسال سیگنال محاسباتی میان دو نورون شبکه." },
+            { id: 70, cat: 2, en: "Pooling", pr: "پولینگ", fa: "کاهش ابعاد (پولینگ)", desc: "فرآیند استخراج مشخصه‌های کلی تصویر و کوچک‌تر کردن اندازه ابعاد ماتریس‌ها." },
+            { id: 71, cat: 2, en: "Dropout", pr: "دراپ‌اوت", fa: "حذف تصادفی نورون‌ها", desc: "خاموش کردن موقت نورون‌ها برای جلوگیری از بروز پدیده بیش‌برازش." },
+            { id: 72, cat: 2, en: "Fine-tuning", pr: "فاین تیونینگ", fa: "تنظیم دقیق", desc: "آموزش جزئی و ثانویه یک مدل پایه از پیش‌ساخته روی دیتاست جدید و کوچک‌تر." },
+            { id: 73, cat: 2, en: "Transfer Learning", pr: "ترنسفر لرنینگ", fa: "یادگیری انتقالی", desc: "به‌کارگیری دانش ذخیره‌شده یک مدل قدیمی برای تسریع در یادگیری کاری نو." },
+            { id: 74, cat: 2, en: "Embedding", pr: "امبدینگ", fa: "امبدینگ / جاسازی عددی", desc: "نگاشت برداری داده‌های متنی یا اشیاء به فضا با ابعاد بهینه ریاضی." },
+            { id: 75, cat: 2, en: "Latent Space", pr: "لیتنت اسپیس", fa: "فضای پنهان", desc: "فضای برداری فشرده حاوی ویژگی‌های مفهومی و اصلی داده‌های ورودی." },
+            { id: 76, cat: 2, en: "Attention Mechanism", pr: "اتنشن مکانیزم", fa: "مکانیزم توجه", desc: "تکنیک متمرکزسازی نگاه مدل بر بخش‌های اصلی و با اهمیت ورودی." },
+            { id: 77, cat: 2, en: "Self-Attention", pr: "سلف اتنشن", fa: "خود‌توجهی", desc: "سنجش همبستگی کلمات یک جمله نسبت به کلمات مجاور همان جمله." },
+            { id: 78, cat: 2, en: "Feedforward", pr: "فیدفوروارْد", fa: "پیش‌رو / فیدفوروارْد", desc: "جریان حرکت مستقیم داده‌ها از لایه ورودی به خروجی بدون بازگشت لوپ." },
+            { id: 79, cat: 2, en: "Parameter", pr: "پارامتر", fa: "پارامترهای قابل آموزش", desc: "متغیرهایی نظیر وزن‌ها و بایاس‌ها که الگوریتم در زمان آموزش تنظیم می‌کند." },
+            { id: 80, cat: 2, en: "Weights Initialization", pr: "ویتس اینیشیالایزیشن", fa: "مقداردهی اولیه وزن‌ها", desc: "تعیین مقادیر آغازین وزن‌های شبکه عصبی برای پایداری در بهینه‌سازی گرادیان." },
+            { id: 81, cat: 2, en: "Perceptron", pr: "پرسپترون", fa: "پرسپترون", desc: "قدیمی‌ترین و پایه‌ای‌ترین شکل شبکه عصبی تک‌لایه خطی." },
+            { id: 82, cat: 2, en: "Multi-Layer Perceptron", pr: "مولتی لیر پرسپترون", fa: "پرسپترون چندلایه (MLP)", desc: "شبکه‌ای عصبی شامل چندین لایه متصل به هم مجهز به توابع غیرخطی." },
+            { id: 83, cat: 2, en: "Vanishing Gradient", pr: "ونیشینگ گرادیان", fa: "محو شدگی گرادیان", desc: "مشکل جدی کاهش نزدیک به صفر مشتق خطا در لایه‌های ابتدایی شبکه‌های عمیق." },
+            { id: 84, cat: 2, en: "Exploding Gradient", pr: "اکسپلودینگ گرادیان", fa: "انفجار گرادیان", desc: "افزایش بسیار بزرگ و ناگهانی مقدار مشتق‌های خطا در طول فرآیند آموزش." },
+            { id: 85, cat: 2, en: "Batch Normalization", pr: "بچ نرمالایزیشن", fa: "نرمال‌سازی دسته‌ای", desc: "تکنیکی برای نرمال کردن ورودی‌های هر لایه در طول آموزش جهت ثبات بیشتر." },
+            { id: 86, cat: 2, en: "Optimizers", pr: "اپتیمایزرز", fa: "بهینه‌سازها", desc: "الگوریتم‌هایی نظیر Adam یا SGD برای آپدیت دقیق‌تر پارامترها." },
+            { id: 87, cat: 2, en: "Adam Optimizer", pr: "آدام اپتیمایزر", fa: "بهینه‌ساز آدام", desc: "الگوریتم بهینه‌سازی تطبیقی با ترکیب ویژگی‌های گشتاور و سرعت نزول." },
+            { id: 88, cat: 2, en: "Recurrent Unit", pr: "ریکارنت یونیت", fa: "واحد برگشتی", desc: "جزء محاسباتی پایه‌ای در شبکه‌های RNN با نگه‌داری اطلاعات حالت قبلی." },
+            { id: 89, cat: 2, en: "Gated Recurrent Unit", pr: "گیتد ریکارنت یونیت", fa: "واحد برگشتی دروازه‌دار (GRU)", desc: "مدل ساده‌شده ال‌اس‌تی‌ام با دو دروازه بروزرسانی و بازنشانی." },
+            { id: 90, cat: 2, en: "Radial Basis Function", pr: "ردیال بیسیس فانکشن", fa: "شبکه تابع پایه شعاعی (RBF)", desc: "نوعی شبکه عصبی که از توابع ریاضی فاصله محور به عنوان فعال‌سازی بهره می‌برد." },
+            { id: 91, cat: 2, en: "Hopfield Network", pr: "هاپفیلد نتورک", fa: "شبکه هاپفیلد", desc: "نوعی حافظه تداعی‌گر و خودبرگشت متقارن در معماری‌های اولیه عصبی." },
+            { id: 92, cat: 2, en: "Kohonen Map", pr: "کوهونن مپ", fa: "نقشه خودسازمان‌ده کوهونن (SOM)", desc: "مدل خوشه‌بندی شبکه عصبی بدون نیاز به نظارت برای کاهش بعد داده‌ها." },
+            { id: 93, cat: 2, en: "Deep Belief Network", pr: "دیپ بلیو نتورک", fa: "شبکه باور عمیق", desc: "شبکه‌ای عمیق متشکل از ماشین‌های بولتزمن محدود شده روی هم." },
+            { id: 94, cat: 2, en: "Restricted Boltzmann Machine", pr: "رستریکتد بولتزمن ماشین", fa: "ماشین بولتزمن محدود شده (RBM)", desc: "یک شبکه عصبی مولد احتمالی دو لایه متقارن." },
+            { id: 95, cat: 2, en: "LeakyReLU", pr: "لیکی ری‌لو", fa: "تابع ری‌لو نشت‌دار", desc: "بهبود تابع ری‌لو با عبور ناچیز مقادیر منفی برای ممانعت از مرگ نورون‌ها." },
+            { id: 96, cat: 2, en: "ELU", pr: "ای‌ال‌یو", fa: "تابع فعال‌سازی واحد خطی نمایی", desc: "نوعی تابع فعال‌سازی غیرخطی هموار برای سرعت بخشیدن به آموزش مدل." },
+            { id: 97, cat: 2, en: "Forward Propagation", pr: "فوروارْد پراپگیشن", fa: "انتشار رو به جلو", desc: "محاسبه گام‌به‌گام و لایه‌ای خروجی شبکه با ورودی‌های مشخص." },
+            { id: 98, cat: 2, en: "Loss Landscape", pr: "لاس لنداسکیپ", fa: "چشم‌انداز خطای مدل", desc: "منحنی چندبعدی پستی و بلندی‌های خطا بر حسب تمام وزن‌های قابل تنظیم شبکه." },
+            { id: 99, cat: 2, en: "Saddle Point", pr: "سدل پوینت", fa: "نقطه زینی", desc: "نقطه‌ای در فضای خطا که شیب آن صفر است اما نقطه مینیمم کلی یا محلی نیست." },
+            { id: 100, cat: 2, en: "Local Minima", pr: "لوکال مینیما", fa: "مینیمم محلی", desc: "نقطه‌ای در فضای خطا با کمترین مقدار نسبت به نقاط مجاور خود." },
 
             // ================== CATEGORY 3: پردازش زبان طبیعی و مدل‌های زبانی (101-150) ==================
             { id: 101, cat: 3, en: "Natural Language Processing", pr: "نچرال لنگویج پراسسینگ", fa: "پردازش زبان طبیعی (NLP)", desc: "تعامل هوشمند میان کامپیوترها و زبان‌های انسانی." },
@@ -436,7 +554,7 @@
             { id: 168, cat: 4, en: "Style Transfer", pr: "استایل ترنسفر", fa: "انتقال سبک هنری", desc: "ترکیب سبک و پالت رنگی یک نقاشی هنری روی تصویر معمولی دیگر." },
             { id: 169, cat: 4, en: "Image Annotation", pr: "ایمیج انوتیشن", fa: "برچسب‌گذاری عکس", desc: "فرآیند نشانه‌گذاری و تعیین مرزهای اشیاء داخل تصویر جهت آموزش به مدل." },
             { id: 170, cat: 4, en: "Keypoint Detection", pr: "کی‌پوینت دیتکشن", fa: "تشخیص نقاط کلیدی", desc: "شناسایی و پیگیری اتصالات مفاصل بدن یا جزئیات دقیق چشم و دهان در تصویر." },
-            { id: 171, cat: 4, en: "Semantic Segmentation", pr: "سیمنتیک سگمنتیشن", fa: "بخش‌بندی معنایی تصویر", desc: "دسته‌بندی جداگانه تمام پیکسل‌ها بدون تفاوت قائل شدن میان نمونه‌های مشابه از یک جنس." },
+            { id: 171, cat: 4, en: "Semantic Segmentation", pr: "سیمنتیک سگمنتیشن", fa: "بخش‌بندی معنایی تصویر", desc: "دسته‌بندی جداگانه تمام پیکسل‌ها بر اساس کلاس کلی شیء." },
             { id: 172, cat: 4, en: "Instance Segmentation", pr: "اینستنس سگمنتیشن", fa: "بخش‌بندی نمونه‌ها", desc: "دقیق‌ترین نوع بخش‌بندی تصویر که پیکسل‌های اشیاء همنوع را نیز از هم جدا می‌کند." },
             { id: 173, cat: 4, en: "3D Reconstruction", pr: "تری‌دی ریکا‌نستراکشن", fa: "بازسازی سه‌بعدی دیجیتالی", desc: "ساخت مدل‌های سه‌بعدی کامپیوتری از روی عکس‌های دوبعدی متوالی." },
             { id: 174, cat: 4, en: "Optical Flow", pr: "اپتیکال فلو", fa: "جریان نوری تصویر", desc: "الگوریتم تشخیص جهت و سرعت جابجایی پیکسل‌ها بین فریم‌های ویدیو." },
@@ -496,7 +614,7 @@
             { id: 226, cat: 5, en: "Principal Component Analysis", pr: "پرینسیپال کامپوننت آنالیز", fa: "تحلیل مؤلفه‌های اصلی (PCA)", desc: "الگوریتم پرکاربرد جبر خطی جهت کاهش ابعاد ماتریس‌ها." },
             { id: 227, cat: 5, en: "Imbalanced Data", pr: "ایمبلنسد دیتا", fa: "داده‌های نامتوازن", desc: "دیتاست‌هایی که در آن فراوانی نمونه‌های یک کلاس با کلاس دیگر تفاوت شدیدی دارد." },
             { id: 228, cat: 5, en: "Data Pipeline", pr: "دیتا پایپلاین", fa: "خط لوله داده خودکار", desc: "مجموعه مسیرهای انتقال خودکار داده از مبدا تا پایگاه‌های تحلیل نهایی." },
-            { id: 229, cat: 5, en: "ETL", pr: "ای‌تی‌ال", fa: "استخراج، تبدیل و بارگذاری (ETL)", desc: "مراحل استاندارد انتقال داده: Extract و Transform و نهایتاً Load در دیتابیس." },
+            { id: 229, cat: 5, en: "ETL", pr: "ای‌تی‌ال", fa: "استخراج، تبدیل و بارگذاری (ETL)", desc: "مراحل انتقال داده: Extract و Transform و نهایتاً Load در دیتابیس." },
             { id: 230, cat: 5, en: "Data Lake", pr: "دیتا لیک", fa: "دریاچه داده خام", desc: "مخزن بزرگ نگه‌داری داده‌های خام بدون اعمال ساختار یا فیلترینگ اولیه." },
             { id: 231, cat: 5, en: "Data Warehouse", pr: "دیتا ورهاوس", fa: "انبار داده‌های ساختاریافته", desc: "سیستم ذخیره‌سازی بزرگ داده‌های تمیزکاری‌شده و فیلتر شده مناسب برای بیزینس." },
             { id: 232, cat: 5, en: "A/B Testing", pr: "ای بی تستینگ", fa: "آزمون مقایسه‌ای A/B", desc: "مقایسه دو نسخه مختلف از یک ویژگی روی کاربران واقعی جهت بررسی برتری آماری." },
@@ -505,7 +623,7 @@
             { id: 235, cat: 5, en: "Linear Discriminant Analysis", pr: "لینیر دیسکریمینانت آنالیز", fa: "تحلیل تشخیص خطی (LDA)", desc: "روشی برای کاهش ابعاد داده و طبقه‌بندی کلاس‌ها بر اساس بیشینه کردن فاصله مراکز." },
             { id: 236, cat: 5, en: "ANOVA", pr: "انووا", fa: "تحلیل واریانس (ANOVA)", desc: "آزمون آماری مقایسه میانگین‌های بیش از دو گروه مستقل جامعه." },
             { id: 237, cat: 5, en: "Chi-Square Test", pr: "کای اسکوئر تست", fa: "آزمون خی‌دو آماری", desc: "آزمون بررسی استقلال یا رابطه بین دو متغیر دسته‌بندی گسسته." },
-            { id: 238, cat: 5, en: "Confidence Interval", pr: "کانفیدنس اینتروال", fa: "بازه اطمینان آماری", desc: "محدوده حدودی که با احتمال مشخص شامل مقدار واقعی جامعه است." },
+            { id: 238, cat: 5, en: "Confidence Interval", pr: "کانفیدنس اینتروال", fa: "بازه اطمینان آماری", desc: "محدوده حدودی که با احتمال مشخص شامل مقدار واقعی جامعه." },
             { id: 239, cat: 5, en: "Collinearity", pr: "کالینیرتی", fa: "هم‌خطی متغیرها", desc: "رابطه خطی شدید بین متغیرهای مستقل در رگرسیون که دقت تخمین را پایین می‌آورد." },
             { id: 240, cat: 5, en: "Pandas", pr: "پانداس", fa: "کتابخانه پانداس پایتون", desc: "محبوب‌ترین ابزار پایتون جهت تحلیل داده‌ها و مدیریت جداول دیتابیس." },
             { id: 241, cat: 5, en: "NumPy", pr: "نام‌پای", fa: "کتابخانه ریاضی نام‌پای", desc: "کتابخانه محاسبات سریع ماتریسی و برداری پایتون با کدهای بهینه." },
@@ -521,7 +639,7 @@
 
             // ================== CATEGORY 6: برنامه‌نویسی و ساختارهای داده (251-300) ==================
             { id: 251, cat: 6, en: "Programming Language", pr: "پروگرمینگ لنگویج", fa: "زبان برنامه‌نویسی", desc: "زبان رسمی حاوی دستورالعمل‌های استاندارد برای کنترل رفتارهای کامپیوتر." },
-            { id: 252, cat: 6, en: "Variable", pr: "وریبل", fa: "متغیر", desc: "خانه‌ای نام‌گذاری‌شده در حافظه برای نگه‌داری موقت داده‌های قابل تغییر برنامه." },
+            { id: 252, cat: 6, en: "Variable", pr: "وریبل", fa: "متغیر", desc: "خانه‌ای نام‌گذاری‌شده در حافظه برای نگه‌داری موقت داده‌های برنامه." },
             { id: 253, cat: 6, en: "Constant", pr: "کانستنت", fa: "مقدار ثابت غیرقابل تغییر", desc: "مقداری در برنامه که پس از تعریف شدن، هرگز در طول اجرا تغییر نمی‌کند." },
             { id: 254, cat: 6, en: "Data Type", pr: "دیتا تایپ", fa: "نوع داده", desc: "تعیین‌کننده جنس مقادیر حافظه (مانند عددی، متنی و منطقی) برای مفسر." },
             { id: 255, cat: 6, en: "Integer", pr: "اینتجر", fa: "عدد صحیح بدون اعشار", desc: "نوع داده‌ای مخصوص نگه‌داری اعداد مثبت، منفی و صفر بدون بخش اعشاری." },
@@ -533,7 +651,7 @@
             { id: 261, cat: 6, en: "Tuple", pr: "تاپل", fa: "چندتایی غیرقابل تغییر (تاپل)", desc: "نوعی لیست با اندازه ثابت که اعضای آن بعد از مقداردهی اولیه تغییر نمی‌کنند." },
             { id: 262, cat: 6, en: "Dictionary", pr: "دیکشنری", fa: "فرهنگ نگاشت (کلید-مقدار)", desc: "ساختار داده ذخیره‌سازی داده به شکل زوج‌های کلید و مقدار (Key-Value)." },
             { id: 263, cat: 6, en: "Set", pr: "ست", fa: "مجموعه غیراستیک تکراری", desc: "مجموعه‌ای نامرتب از آیتم‌های منحصربه‌فرد بدون پذیرش اعضای تکراری." },
-            { id: 264, cat: 6, en: "Class", pr: "کلاس", fa: "کلاس", desc: "طرح اولیه یا قالب استاندارد برنامه‌نویسی برای تولید اشیاء در شیءگرایی." },
+            { id: 264, cat: 6, en: "Class", pr: "کلاس", fa: "کلاس", desc: "طرح اولیه یا قالب استاندارد برای تولید اشیاء در شیءگرایی." },
             { id: 265, cat: 6, en: "Object", pr: "آبجکت", fa: "شیء عینی", desc: "نمونه زنده و ساخته شده از روی قالب کلاس در حافظه." },
             { id: 266, cat: 6, en: "Method", pr: "متد", fa: "متد / تابع درون کلاس", desc: "تابعی که درون یک کلاس تعریف شده و عملکرد اشیاء آن کلاس را پیاده می‌کند." },
             { id: 267, cat: 6, en: "Function", pr: "فانکشن", fa: "تابع برنامه‌نویسی مستقل", desc: "بلاک کدی با نام مشخص و ورودی‌های معین با قابلیت فراخوانی مکرر." },
@@ -584,7 +702,7 @@
             { id: 310, cat: 7, en: "Pull Request", pr: "پول ریکوئست", fa: "درخواست ادغام (PR / Pull Request)", desc: "درخواست رسمی برای بازبینی و گرفتن اجازه ادغام کدهای شما به ریپازیتوری اصلی." },
             { id: 311, cat: 7, en: "Conflict (VCS)", pr: "کانفلیکت گیت", fa: "تداخل خطوط کد گیت", desc: "وقوع مغایرت فنی زمانی که دو توسعه‌دهنده به طور مستقل یک خط کد مشابه را متمایز نوشته باشند." },
             { id: 312, cat: 7, en: "Code Review", pr: "کد ریویو", fa: "بازبینی و ارزیابی کدهای پروژه", desc: "بررسی کیفی کدهای نوشته‌شده هم‌تیمی‌ها جهت کاهش باگ‌ها و ارتقای استانداردها." },
-            { id: 313, cat: 7, en: "Refactoring", pr: "ریفکتورینگ", fa: "بازنویسی و بهبود ساختاری کد", desc: "بازنویسی و اصلاح ساختار کد بدون تغییر دادن خروجی نهایی آن جهت ارتقای خوانایی." },
+            { id: 313, cat: 7, en: "Refactoring", pr: "ریفکتورینگ", fa: "بازنویسی و بهبود ساختاری کد", desc: "بازنویسی و اصلاح ساختار کد بدون تغییر دادن خروجی نهایی آن جهت خوانایی." },
             { id: 314, cat: 7, en: "Design Pattern", pr: "دیزاین پترن", fa: "الگوهای طراحی استاندارد", desc: "راه‌حل‌های اثبات‌شده بهینه برای مشکلات تکراری معماری برنامه‌نویسی." },
             { id: 315, cat: 7, en: "SOLID Principles", pr: "سالید پرینسیپلز", fa: "اصول پنج‌گانه سالید (SOLID)", desc: "پنج اصل طراحی کلاس‌ها برای قابل فهم بودن و نگه‌داری راحت‌تر پروژه‌های شیءگرا." },
             { id: 316, cat: 7, en: "Singleton Pattern", pr: "سینگلتون پترن", fa: "الگوی طراحی تک‌نمونه‌ای", desc: "الگوی تضمین‌کننده این موضوع که از کلاس تعریف‌شده فقط یک شیء یکتا در کل برنامه ساخته می‌شود." },
@@ -656,7 +774,7 @@
             { id: 380, cat: 8, en: "Cross-Site Scripting", pr: "کراس سایت اسکریپتینگ", fa: "تزریق اسکریپت مخرب مرورگر (XSS)", desc: "تزریق اسکریپت‌های مخرب مرورگر به صفحات وبِ بازدید شده توسط دیگر کاربران." },
             { id: 381, cat: 8, en: "OAuth", pr: "اواوت", fa: "پروتکل احراز هویت OAuth", desc: "پروتکل استاندارد امن جهت اتصال حساب‌های گوگل یا گیت‌هاب شما به وب‌سایت‌های ثالث." },
             { id: 382, cat: 8, en: "JSON Web Token", pr: "جیسون وب توکن", fa: "توکن امنیتی JWT", desc: "توکن‌های سبک رمزنگاری شده جهت انتقال ایمن اطلاعات احراز هویت کاربران مابین فرانت و بک." },
-            { id: 383, cat: 8, en: "Single Page Application", pr: "سینگل پیج اپلیکیشن", fa: "برنامه‌های تک‌صفحه‌ای وب (SPA)", desc: "وب‌سایت‌های مدرنی که لود صفحات در آن‌ها بدون نیاز به بارگذاری مجدد مرورگر انجام می‌شود." },
+            { id: 383, cat: 8, en: "Single Page Application", pr: "اندازه صفحه‌های وب مدرن (SPA)", desc: "وب‌سایت‌های مدرنی که لود صفحات در آن‌ها بدون نیاز به بارگذاری مجدد مرورگر انجام می‌شود." },
             { id: 384, cat: 8, en: "Server-Side Rendering", pr: "سرور ساید رندرینگ", fa: "رندر سمت سرور صفحات (SSR)", desc: "فناوری ساخت لایه بصری صفحات وب در سمت سرور و ارسال مستقیم آن به مرورگر کاربر." },
             { id: 385, cat: 8, en: "Static Site Generator", pr: "استاتیک سایت جنریتور", fa: "تولیدکننده سایت ایستا", desc: "ابزارهایی که فایل‌های HTML ایستا را مابازای کدهای فرانت‌آند در زمان ساخت پروژه تولید می‌کنند." },
             { id: 386, cat: 8, en: "Relational Mapping", pr: "ریلیشنال مپینگ", fa: "روابط مابین جداول دیتابیس", desc: "تعریف روابط یک‌به‌یک، یک‌به‌چند، یا چندبه‌چند مابین رکوردهای پایگاه داده." },
@@ -667,7 +785,7 @@
             { id: 391, cat: 8, en: "Graph Database", pr: "گراف دیتابیس", fa: "پایگاه داده گرافی رابطه‌ها", desc: "دیتابیس‌های مناسب ذخیره گراف‌ها و شبکه‌های دوستی پیچیده با سرعت بالا." },
             { id: 392, cat: 8, en: "SQL Joins", pr: "اس‌کیوال جوینز", fa: "ادغام جداول در کوئری", desc: "دستورات ترکیب سطرها از دو یا چند جدول بر اساس ستون‌های مشترک." },
             { id: 393, cat: 8, en: "Denormalization", pr: "دی‌نورمالایزیشن", fa: "غیرنرمال‌سازی دیتابیس", desc: "افزودن عمدی داده‌های تکراری به جداول جهت ارتقای چشمگیر سرعت در خواندن اطلاعات." },
-            { id: 394, cat: 8, en: "Penetration Testing", pr: "پنتریشن تستینگ", fa: "تست نفوذ و هک قانونمند", desc: "فرآیند شبیه‌سازی حملات سایبری واقعی جهت یافتن رخنه‌های امنیتی نرم‌افزار." },
+            { id: 394, cat: 8, en: "Penetration Testing", pr: "پنتریشن تستینگ", fa: "تست نفوذ و هک قانونمند", desc: "فرآیند شبیه‌سازی حملات سایبری واقعی جهت یافتن رخانه‌های امنیتی نرم‌افزار." },
             { id: 395, cat: 8, en: "DDoS Attack", pr: "دی‌داس سایبر اتک", fa: "حملات ممانعت از سرویس (DDoS)", desc: "خرابکاری با ارسال ترافیک فیک میلیونی به سمت سرور برای خارج کردن سایت از دسترس." },
             { id: 396, cat: 8, en: "HTTPS Protocol Secure", pr: "اچ‌تی‌تی‌پی‌اس پروتکل", fa: "پروتکل امن وب HTTPS", desc: "نسخه رمزنگاری شده و بسیار امن تبادل اطلاعات در وب با گواهینامه SSL." },
             { id: 397, cat: 8, en: "Secure Sockets Layer", pr: "سکیور ساکتز لیر", fa: "پروتکل امنیتی SSL", desc: "پروتکل رمزنگاری کانال ارتباطی کلاینت و سرور اینترنت." },
@@ -752,7 +870,7 @@
             { id: 472, cat: 10, en: "Quantization (AI)", pr: "کوانتیزیشن", fa: "کوانتیزه کردن مدل‌های بزرگ", desc: "کاهش دقت اعشاری وزن‌ها از fp32 به int8 جهت اجرای سریع روی موبایل." },
             { id: 473, cat: 10, en: "Pruning (networks)", pr: "پرونینگ شبکه‌های عصبی", fa: "هرس کردن اتصالات اضافی", desc: "حذف اتصالات و وزن‌های بسیار کم‌تاثیر جهت کاهش فوق‌العاده حجم شبکه عصبی." },
             { id: 474, cat: 10, en: "AutoML", pr: "اتو ام‌ال", fa: "یادگیری ماشین خودکار", desc: "سیستم‌های اتوماسیون تمام مراحل یادگیری ماشین از پاک‌سازی تا آموزش نهایی." },
-            { id: 475, cat: 10, en: "Edge AI", pr: "اج ای‌آی", fa: "اجرای هوش مصنوعی روی دستگاه", desc: "استنتاج مدل‌ها به صورت مستقیم و لوکال روی چیپست گوشی بدون نیاز به اینترنت." },
+            { id: 475, cat: 10, en: "Edge AI", pr: "اج ای‌آی", fa: "اجرای هوش مصنوعی روی دستگاه", desc: "اجرای مستقیم و لوکال روی چیپست گوشی بدون نیاز به اینترنت." },
             { id: 476, cat: 10, en: "Multimodal AI", pr: "مالتی‌مودال ای‌آی", fa: "هوش مصنوعی چندوجهی", desc: "مدل‌های توانمند در تحلیل همزمان متن، تصاویر، صوت و ویدیوهای تعاملی." },
             { id: 477, cat: 10, en: "RLHF", pr: "آر‌ال‌اچ‌اف", fa: "یادگیری تقویتی با فیدبک انسان", desc: "بهینه‌سازی کیفیت پاسخ‌های مدل بر مبنای امتیازدهی و انتخاب‌های ناظران انسانی." },
             { id: 478, cat: 10, en: "Alignment (AI)", pr: "الاینمنت", fa: "هم‌راستاسازی با اهداف انسانی", desc: "تضمین هم‌جهتی کامل نیت سیستم‌های هوشمند با اخلاقیات و خواسته‌های واقعی بشر." },
@@ -780,23 +898,266 @@
             { id: 500, cat: 10, en: "Deep Learning Neural Architecture", pr: "دیپ لرنینگ نورال آرکیتکچر", fa: "معماری نهایی مدل یادگیری عمیق", desc: "ترکیب طلایی و لایه‌بندی بهینه شبکه آموزش‌دیده کدهای نهایی ۵۰۰ واژه." }
         ];
 
-        // Active state variables
+        // Active State Variables
         let currentTab = 'explorer';
         let filteredWordsList = [...glossaryData];
         let currentFcIndex = 0;
         let isFlipped = false;
+
+        // User Data State (Synced locally as fallback or via Firebase if loaded)
+        let currentUser = null;
+        let userFavorites = []; // array of word IDs
 
         // Quiz State
         let quizQuestions = [];
         let currentQuizIndex = 0;
         let quizScore = 0;
 
-        window.addEventListener('DOMContentLoaded', () => {
+        // Auth Modal State
+        let authMode = 'login'; // or 'signup'
+    </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, getDoc, updateDoc, onSnapshot, collection } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Global Firebase Configuration Retrieval
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'ai-glossary-samizadeh';
+        let firebaseConfig = null;
+        try {
+            if (typeof __firebase_config !== 'undefined') {
+                firebaseConfig = JSON.parse(__firebase_config);
+            }
+        } catch(e) {
+            console.warn("Could not parse Firebase config. Falling back to local offline mode.");
+        }
+
+        let db = null;
+        let auth = null;
+        let isFirebaseActive = false;
+
+        // Initialize Firebase if configuration exists
+        if (firebaseConfig && firebaseConfig.apiKey) {
+            try {
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                isFirebaseActive = true;
+                console.log("Firebase initialized successfully.");
+            } catch (err) {
+                console.error("Firebase init failed, switching to local offline mockup mode:", err);
+            }
+        }
+
+        // Bootstrapping Authentication & Database Sync
+        window.addEventListener('DOMContentLoaded', async () => {
+            // Load offline storage immediately so the app is instantly usable
+            loadLocalSession();
+            
+            if (isFirebaseActive) {
+                // Rule 3: Auth Before Queries - Silent Anonymous Authentication to guarantee security context
+                try {
+                    // Try to log in with custom token if provided
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    }
+                } catch(e) {
+                    console.debug("Custom token login failed, falling back to anonymous or normal user login.");
+                }
+
+                // Handle Auth changes
+                onAuthStateChanged(auth, async (user) => {
+                    document.getElementById('auth-loading').classList.add('hidden');
+                    
+                    if (user) {
+                        currentUser = user;
+                        // Show logged in state
+                        document.getElementById('btn-show-login').classList.add('hidden');
+                        document.getElementById('auth-logged-in').classList.remove('hidden');
+                        document.getElementById('user-display-email').textContent = user.isAnonymous ? "مهمان موقت" : user.email;
+                        document.getElementById('user-display-email').title = user.uid;
+                        document.getElementById('fav-guest-alert').classList.add('hidden');
+
+                        // Sync favorites from Firestore
+                        // Rule 1: Strict Paths - /artifacts/{appId}/users/{userId}/{collectionName}
+                        const favDocRef = doc(db, 'artifacts', appId, 'users', user.uid, 'favorites', 'saved');
+                        
+                        onSnapshot(favDocRef, (docSnap) => {
+                            if (docSnap.exists()) {
+                                userFavorites = docSnap.data().list || [];
+                            } else {
+                                userFavorites = [];
+                            }
+                            updateFavoritesUI();
+                        }, (error) => {
+                            console.error("Error reading favorites from Firestore:", error);
+                            if (error.code === 'permission-denied') {
+                                console.warn("Switching to local storage fallback due to missing Firestore Rules.");
+                                loadLocalSession();
+                                updateFavoritesUI();
+                                showToast('خطای دسترسی ابری! لطفاً راهنمای قوانین امنیتی Firestore را بخوانید.', 'fa-triangle-exclamation text-amber-500');
+                            }
+                        });
+
+                    } else {
+                        // User not logged in - Attempt standard automatic anonymous sign-in to fulfill Rule 3
+                        currentUser = null;
+                        document.getElementById('auth-logged-in').classList.add('hidden');
+                        document.getElementById('btn-show-login').classList.remove('hidden');
+                        updateFavoritesUI();
+                    }
+                });
+            } else {
+                // Mock Offline Mode handling
+                setTimeout(() => {
+                    document.getElementById('auth-loading').classList.add('hidden');
+                    document.getElementById('btn-show-login').classList.remove('hidden');
+                    updateFavoritesUI();
+                    showToast('برنامه در حالت لوکال (آفلاین) اجرا شده است. حساب‌ها به صورت آزمایشی کار می‌کنند.', 'fa-plug text-yellow-500');
+                }, 800);
+            }
+
             renderExplorerCards();
             updateResultsCount();
             initFlashcards();
         });
 
+        // --- AUTHENTICATION ACTIONS (EMBEDDED FOR MODULE ACCESSIBILITY) ---
+        window.handleAuthSubmit = async function(event) {
+            event.preventDefault();
+            const email = document.getElementById('auth-email').value.trim();
+            const password = document.getElementById('auth-password').value;
+            const errBox = document.getElementById('auth-error');
+            const submitBtn = document.getElementById('auth-submit-btn');
+
+            errBox.classList.add('hidden');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-spinner animate-spin mr-1"></i> در حال پردازش...';
+
+            if (isFirebaseActive) {
+                try {
+                    if (authMode === 'login') {
+                        await signInWithEmailAndPassword(auth, email, password);
+                        showToast('ورود با موفقیت انجام شد. اطلاعات ابری شما همگام‌سازی گردید.', 'fa-circle-check text-emerald-400');
+                    } else {
+                        await createUserWithEmailAndPassword(auth, email, password);
+                        showToast('ثبت‌نام با موفقیت انجام شد! حساب کاربری ابری شما آماده است.', 'fa-circle-check text-emerald-400');
+                    }
+                    closeAuthModal();
+                } catch (error) {
+                    let friendlyMsg = 'بروز خطا در عملیات احراز هویت. رمز عبور یا ایمیل را مجدد چک کنید.';
+                    if (error.code === 'auth/email-already-in-use') friendlyMsg = 'این ایمیل از قبل در سیستم ثبت شده است.';
+                    if (error.code === 'auth/weak-password') friendlyMsg = 'رمز عبور باید حداقل ۶ کاراکتر باشد.';
+                    if (error.code === 'auth/invalid-email') friendlyMsg = 'فرمت آدرس ایمیل نامعتبر است.';
+                    if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found') friendlyMsg = 'ایمیل یا کلمه عبور نادرست است.';
+                    
+                    errBox.textContent = friendlyMsg;
+                    errBox.classList.remove('hidden');
+                } finally {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = authMode === 'login' ? 'ورود به حساب کاربری' : 'ثبت نام حساب کاربری جدید';
+                }
+            } else {
+                // Mock Authentication logic for offline test
+                setTimeout(() => {
+                    currentUser = { uid: 'mock-user-123', email: email, isAnonymous: false };
+                    document.getElementById('auth-logged-in').classList.remove('hidden');
+                    document.getElementById('btn-show-login').classList.add('hidden');
+                    document.getElementById('user-display-email').textContent = email;
+                    document.getElementById('fav-guest-alert').classList.add('hidden');
+                    
+                    saveLocalSession();
+                    updateFavoritesUI();
+                    
+                    showToast('ورود مجازی آفلاین موفقیت‌آمیز بود! (حساب آزمایشی)', 'fa-circle-check text-emerald-400');
+                    closeAuthModal();
+                    
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = authMode === 'login' ? 'ورود به حساب کاربری' : 'ثبت نام حساب کاربری جدید';
+                }, 1000);
+            }
+        };
+
+        window.handleLogout = async function() {
+            if (isFirebaseActive) {
+                try {
+                    await signOut(auth);
+                    userFavorites = [];
+                    updateFavoritesUI();
+                    showToast('با موفقیت از حساب خود خارج شدید.', 'fa-circle-info text-blue-400');
+                } catch(e) {
+                    showToast('خطا در خروج از حساب.', 'fa-triangle-exclamation text-rose-400');
+                }
+            } else {
+                currentUser = null;
+                userFavorites = [];
+                document.getElementById('auth-logged-in').classList.add('hidden');
+                document.getElementById('btn-show-login').classList.remove('hidden');
+                saveLocalSession();
+                updateFavoritesUI();
+                showToast('با موفقیت از حساب آزمایشی خارج شدید.', 'fa-circle-info text-blue-400');
+            }
+        };
+
+        window.toggleFavorite = async function(wordId, event) {
+            if (event) {
+                event.stopPropagation(); // Avoid expanding card details when star is clicked
+            }
+
+            if (!currentUser) {
+                openAuthModal();
+                showToast('لطفاً جهت نشان‌گذاری کلمات و ذخیره ماندگار آن‌ها وارد حساب خود شوید.', 'fa-user-lock text-amber-500');
+                return;
+            }
+
+            const index = userFavorites.indexOf(wordId);
+            if (index > -1) {
+                userFavorites.splice(index, 1);
+                showToast('کلمه از نشان‌شده‌ها حذف شد.', 'fa-star-half text-slate-400');
+            } else {
+                userFavorites.push(wordId);
+                showToast('کلمه با موفقیت نشان شد.', 'fa-star text-yellow-400');
+            }
+
+            updateFavoritesUI();
+
+            // Sync with Firebase Firestore or local storage
+            if (isFirebaseActive && currentUser) {
+                try {
+                    // Rule 1: Strict Paths - /artifacts/{appId}/users/{userId}/{collectionName}
+                    const favDocRef = doc(db, 'artifacts', appId, 'users', currentUser.uid, 'favorites', 'saved');
+                    await setDoc(favDocRef, { list: userFavorites }, { merge: true });
+                } catch (err) {
+                    console.error("Failed to sync favorites with Firestore:", err);
+                }
+            } else {
+                saveLocalSession();
+            }
+        };
+    </script>
+
+    <script>
+        // Local Session manager (Fallback for offline preview)
+        function saveLocalSession() {
+            localStorage.setItem('mock_user', currentUser ? JSON.stringify(currentUser) : '');
+            localStorage.setItem('mock_favorites', JSON.stringify(userFavorites));
+        }
+
+        function loadLocalSession() {
+            const storedUser = localStorage.getItem('mock_user');
+            const storedFavs = localStorage.getItem('mock_favorites');
+            
+            if (storedUser) {
+                currentUser = JSON.parse(storedUser);
+            }
+            if (storedFavs) {
+                userFavorites = JSON.parse(storedFavs);
+            }
+        }
+    </script>
+
+    <script>
         // Speech Synthesis and Notification Utility
         function speakWord(text, event) {
             if (event) {
@@ -833,7 +1194,7 @@
 
         function switchTab(tabId) {
             currentTab = tabId;
-            const tabs = ['explorer', 'flashcards', 'quiz'];
+            const tabs = ['explorer', 'favorites', 'flashcards', 'quiz'];
             
             tabs.forEach(t => {
                 const btn = document.getElementById(`tab-${t}`);
@@ -850,7 +1211,9 @@
                 }
             });
 
-            if(tabId === 'flashcards') {
+            if(tabId === 'favorites') {
+                renderFavoritesCards();
+            } else if(tabId === 'flashcards') {
                 resetFlashcardView();
             }
         }
@@ -871,6 +1234,9 @@
             }
 
             filteredWordsList.forEach(w => {
+                const isFav = userFavorites.includes(w.id);
+                const starClass = isFav ? "fa-solid fa-star text-yellow-400 scale-110" : "fa-regular fa-star text-slate-500 hover:text-yellow-400";
+                
                 const card = document.createElement('div');
                 card.className = "bg-slate-900/60 hover:bg-slate-900/90 p-5 rounded-2xl border border-slate-800/80 hover:border-blue-500/50 transition-all duration-300 shadow-md flex flex-col justify-between group cursor-pointer";
                 card.onclick = () => toggleCardDetails(w.id);
@@ -884,7 +1250,12 @@
                                     <i class="fa-solid fa-volume-high text-xs"></i>
                                 </button>
                             </div>
-                            <span class="text-[9px] bg-slate-950 text-slate-500 px-2.5 py-1 rounded-md font-bold shrink-0">کد ${w.id}</span>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button onclick="toggleFavorite(${w.id}, event)" class="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-slate-300 transition-all" title="نشاندار کردن">
+                                    <i class="${starClass} text-sm"></i>
+                                </button>
+                                <span class="text-[9px] bg-slate-950 text-slate-500 px-2.5 py-1 rounded-md font-bold">کد ${w.id}</span>
+                            </div>
                         </div>
                         <div class="flex flex-wrap items-center gap-2">
                             <span class="text-[10px] text-blue-300 font-bold bg-blue-500/10 px-3 py-1 rounded-full">تلفظ: ${w.pr}</span>
@@ -930,7 +1301,137 @@
             const countSpan = document.getElementById('results-count');
             countSpan.textContent = `یافت شده: ${filteredWordsList.length} از ۵۰۰ واژه تخصصی`;
         }
+    </script>
 
+    <script>
+        // --- FAVORITES LOGIC ---
+        function updateFavoritesUI() {
+            // Update Tab Badges
+            const badge = document.getElementById('fav-badge');
+            if (userFavorites.length > 0) {
+                badge.textContent = userFavorites.length;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+
+            // Sync guest alerts
+            const guestAlert = document.getElementById('fav-guest-alert');
+            if (currentUser) {
+                guestAlert.classList.add('hidden');
+            } else {
+                guestAlert.classList.remove('hidden');
+            }
+
+            // If we are currently active on favorites page, re-render immediately
+            if (currentTab === 'favorites') {
+                renderFavoritesCards();
+            } else {
+                // Re-render main grid if we toggled stars on explorer
+                renderExplorerCards();
+            }
+        }
+
+        function renderFavoritesCards() {
+            const grid = document.getElementById('fav-words-grid');
+            grid.innerHTML = '';
+
+            if (!currentUser) {
+                return; // Managed by guest alert
+            }
+
+            const favoritesList = glossaryData.filter(w => userFavorites.includes(w.id));
+
+            if (favoritesList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-16 bg-slate-950/40 rounded-3xl border border-slate-800/60 max-w-md mx-auto">
+                        <i class="fa-regular fa-star text-5xl text-slate-700 mb-3 animate-pulse"></i>
+                        <h3 class="text-base font-bold text-slate-300">لیست نشان‌شده‌ها خالی است</h3>
+                        <p class="text-xs text-slate-500 mt-1">با فشردن دکمه ستاره کارت‌ها، کلمات مهم را به این بخش اضافه کنید.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            favoritesList.forEach(w => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900/60 hover:bg-slate-900/90 p-5 rounded-2xl border border-slate-800/80 hover:border-yellow-500/30 transition-all duration-300 shadow-md flex flex-col justify-between group cursor-pointer";
+                card.onclick = () => toggleCardDetails('fav-' + w.id);
+                
+                card.innerHTML = `
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-start gap-2">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-lg sm:text-xl font-black text-white group-hover:text-yellow-400 transition-colors">${w.en}</h3>
+                                <button onclick="speakWord('${w.en.replace(/'/g, "\\'")}', event)" class="p-2 rounded-xl bg-slate-800 hover:bg-blue-600 hover:text-white text-slate-300 transition-all" title="شنیدن تلفظ صوتی">
+                                    <i class="fa-solid fa-volume-high text-xs"></i>
+                                </button>
+                            </div>
+                            <div class="flex items-center gap-2 shrink-0">
+                                <button onclick="toggleFavorite(${w.id}, event)" class="p-2 rounded-xl bg-slate-800/60 hover:bg-slate-800 text-yellow-400 transition-all" title="حذف از نشان‌شده‌ها">
+                                    <i class="fa-solid fa-star text-sm"></i>
+                                </button>
+                                <span class="text-[9px] bg-slate-950 text-slate-500 px-2.5 py-1 rounded-md font-bold">کد ${w.id}</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-2">
+                            <span class="text-[10px] text-blue-300 font-bold bg-blue-500/10 px-3 py-1 rounded-full">تلفظ: ${w.pr}</span>
+                            <span class="text-[10px] text-pink-300 font-bold bg-pink-500/10 px-3 py-1 rounded-full">${getCategoryName(w.cat)}</span>
+                        </div>
+                        <h4 class="text-base font-bold text-slate-100 pt-2 border-t border-slate-800/60">${w.fa}</h4>
+                        <p id="desc-fav-${w.id}" class="hidden text-xs text-slate-400 leading-relaxed bg-slate-950 p-4 rounded-xl mt-3 border border-slate-800/80">
+                            ${w.desc}
+                        </p>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+    </script>
+
+    <script>
+        // --- AUTH DIALOG LOGIC ---
+        function openAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.querySelector('.transform').classList.remove('scale-95');
+                modal.querySelector('.transform').classList.add('scale-100');
+            }, 10);
+        }
+
+        function closeAuthModal() {
+            const modal = document.getElementById('auth-modal');
+            modal.querySelector('.transform').classList.remove('scale-100');
+            modal.querySelector('.transform').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                document.getElementById('auth-error').classList.add('hidden');
+            }, 200);
+        }
+
+        function switchAuthMode(mode) {
+            authMode = mode;
+            const tabLogin = document.getElementById('auth-tab-login');
+            const tabSignup = document.getElementById('auth-tab-signup');
+            const submitBtn = document.getElementById('auth-submit-btn');
+            const title = document.getElementById('auth-title');
+
+            if (mode === 'login') {
+                tabLogin.className = "flex-1 py-2 rounded-lg text-xs font-black bg-blue-600 text-white transition-all";
+                tabSignup.className = "flex-1 py-2 rounded-lg text-xs font-black text-slate-400 hover:text-slate-200 transition-all";
+                submitBtn.textContent = "ورود به حساب کاربری";
+                title.textContent = "ورود به حساب کاربری";
+            } else {
+                tabSignup.className = "flex-1 py-2 rounded-lg text-xs font-black bg-blue-600 text-white transition-all";
+                tabLogin.className = "flex-1 py-2 rounded-lg text-xs font-black text-slate-400 hover:text-slate-200 transition-all";
+                submitBtn.textContent = "ثبت نام حساب کاربری جدید";
+                title.textContent = "ساخت حساب کاربری";
+            }
+        }
+    </script>
+
+    <script>
         // --- FLASHCARDS LOGIC ---
         function initFlashcards() {
             updateFlashcardData();
@@ -999,7 +1500,9 @@
             };
             return categories[catId] || "عمومی";
         }
+    </script>
 
+    <script>
         // --- QUIZ LOGIC ---
         function startQuiz() {
             document.getElementById('quiz-start-screen').classList.add('hidden');
